@@ -1,8 +1,8 @@
 # 🌍 Renewable Energy Classifier
 
 [![Live Demo](https://img.shields.io/badge/demo-live-brightgreen?style=for-the-badge&logo=netlify)](https://weather-energy.netlify.app/)
-[![HTML](https://img.shields.io/badge/HTML-95.2%25-orange?style=for-the-badge&logo=html5)](https://github.com/Sahibjeetpalsingh/Weather-Classification)
-[![R](https://img.shields.io/badge/R-4.8%25-blue?style=for-the-badge&logo=r)](https://github.com/Sahibjeetpalsingh/Weather-Classification)
+[![R](https://img.shields.io/badge/R-75%25+-blue?style=for-the-badge&logo=r)](https://github.com/Sahibjeetpalsingh/Weather-Classification)
+[![HTML](https://img.shields.io/badge/HTML-25%25-orange?style=for-the-badge&logo=html5)](https://github.com/Sahibjeetpalsingh/Weather-Classification)
 [![License](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)](LICENSE)
 
 > A smart web-based tool that determines the **optimal renewable energy source** (☀️ Solar, 💨 Wind, or 💧 Hydro) based on climate and geographic conditions using an intelligent scoring algorithm.
@@ -29,6 +29,8 @@ Experience the classifier in action! Input your climate parameters and instantly
 | 📱 **Responsive Design** | Works seamlessly on desktop, tablet, and mobile devices |
 | ⚡ **No Server Required** | Pure client-side application - just open and use |
 | 🎨 **Modern UI/UX** | Clean, intuitive interface with smooth animations |
+| 📈 **Advanced R Analytics** | Comprehensive statistical analysis and visualization backend |
+| 🌐 **NOAA API Integration** | Real-time weather data fetching capabilities |
 
 ---
 
@@ -37,10 +39,17 @@ Experience the classifier in action! Input your climate parameters and instantly
 ```
 renewable-energy-classifier/
 │
-├── 📄 index.html          # Interactive web interface (main application)
-├── 📜 classify_energy.R   # R script for data processing & classification
-├── 📊 data.csv            # Output data with location classifications
-└── 📖 README.md           # Project documentation
+├── 📄 index.html           # Interactive web interface (main application)
+│
+├── 📊 R Analysis Suite/
+│   ├── 📜 classify_energy.R    # Main classification engine (800+ lines)
+│   ├── 📜 analysis.R           # Statistical analysis & hypothesis testing
+│   ├── 📜 visualizations.R     # Publication-quality plotting functions
+│   ├── 📜 data_fetch.R         # NOAA API integration & caching
+│   └── 📜 utils.R              # Utility functions & data transformations
+│
+├── 📊 data.csv             # Output data with location classifications
+└── 📖 README.md            # Project documentation
 ```
 
 ---
@@ -60,8 +69,13 @@ The main interactive web interface that provides:
   - ❄️ Arctic/Cold Region
 - **Responsive Layout**: Optimized for all screen sizes
 
-### 📊 `classify_energy.R`
-R script for batch processing weather data:
+---
+
+## 📜 R Analysis Suite (4 Core Modules)
+
+### 📊 `classify_energy.R` - Main Classification Engine
+**~800+ lines** | Core classification logic and data processing
+
 ```r
 # Key Libraries Used
 library(jsonlite)    # JSON handling
@@ -72,11 +86,127 @@ library(readr)       # CSV reading
 library(purrr)       # Functional programming
 ```
 
-**Functionality:**
-- Loads and cleans GHCN weather station data
-- Pivots observation data for analysis
-- Applies scoring algorithms to determine optimal energy sources
-- Outputs classification results to CSV
+**Key Features:**
+- Configurable scoring thresholds via global CONFIG object
+- Individual scoring functions for Solar, Wind, and Hydro energy
+- Vectorized classification for batch processing
+- Comprehensive summary statistics generation
+- Formatted report printing with Unicode symbols
+- Data export to CSV and JSON formats
+
+**Main Functions:**
+| Function | Description |
+|----------|-------------|
+| `classify_energy()` | Core classification algorithm |
+| `classify_dataframe()` | Batch processing for dataframes |
+| `calculate_solar_score()` | Solar energy scoring with breakdown |
+| `calculate_wind_score()` | Wind energy scoring with breakdown |
+| `calculate_hydro_score()` | Hydro energy scoring with breakdown |
+| `generate_summary_stats()` | Statistical summary generation |
+| `main()` | Full pipeline execution |
+
+---
+
+### 📈 `analysis.R` - Statistical Analysis Module
+**~600+ lines** | Comprehensive statistical analysis and hypothesis testing
+
+**Capabilities:**
+- **Descriptive Statistics**: Mean, median, SD, skewness, kurtosis, CV
+- **Hypothesis Testing**: ANOVA, Chi-squared, T-tests with effect sizes
+- **Correlation Analysis**: Pearson, Spearman, Kendall with p-values
+- **Regression Analysis**: Linear models with VIF and model comparison
+- **Classification Metrics**: Confusion matrix, F1, precision, recall, Cohen's Kappa
+- **Cross-Validation**: K-fold CV with aggregated metrics
+- **Feature Importance**: Permutation importance and information gain
+- **Outlier Detection**: IQR, Z-score, and MAD methods
+
+**Key Functions:**
+| Function | Description |
+|----------|-------------|
+| `descriptive_stats()` | Comprehensive numeric statistics |
+| `perform_anova()` | One-way ANOVA with post-hoc tests |
+| `correlation_analysis()` | Correlation matrix with p-values |
+| `confusion_matrix_metrics()` | Classification evaluation metrics |
+| `cross_validate()` | K-fold cross-validation |
+| `permutation_importance()` | Feature importance analysis |
+
+---
+
+### 🎨 `visualizations.R` - Visualization Library
+**~700+ lines** | Publication-quality plotting functions
+
+**Plot Types:**
+- 📊 Distribution bar charts
+- 📦 Score boxplots and violin plots
+- 📈 Histograms and density plots
+- 🔵 Scatter plots with regression
+- 🗺️ Geographic scatter maps
+- 🌡️ Correlation heatmaps
+- 🕸️ Radar/spider charts
+- 📋 Comprehensive dashboards
+
+**Custom Themes:**
+```r
+theme_energy()       # Light theme for publications
+theme_energy_dark()  # Dark theme variant
+energy_colors()      # Consistent color palette
+```
+
+**Key Functions:**
+| Function | Description |
+|----------|-------------|
+| `create_distribution_chart()` | Energy type distribution |
+| `create_score_boxplot()` | Score comparison boxplot |
+| `create_geo_scatter()` | Geographic visualization |
+| `create_correlation_heatmap()` | Variable correlations |
+| `create_radar_chart()` | Single location profile |
+| `create_dashboard()` | Multi-panel dashboard |
+| `generate_all_plots()` | Batch plot generation |
+
+---
+
+### 🌐 `data_fetch.R` - API Integration Module
+**~500+ lines** | NOAA API integration and data management
+
+**Features:**
+- **NOAA CDO API Integration**: Authenticated requests with rate limiting
+- **Station Management**: Search, filter, and fetch station data
+- **Paginated Requests**: Handle large datasets automatically
+- **Data Processing**: Convert GHCN units, aggregate to monthly/climatology
+- **Caching System**: File-based caching with expiration
+- **Sample Data Generation**: Create test data for development
+
+**API Endpoints:**
+| Endpoint | Description |
+|----------|-------------|
+| `stations` | Weather station metadata |
+| `data` | Weather observations |
+
+**Key Functions:**
+| Function | Description |
+|----------|-------------|
+| `fetch_stations()` | Get weather stations |
+| `fetch_station_data()` | Get observations for a station |
+| `fetch_region_data()` | Get data for geographic region |
+| `process_noaa_data()` | Process raw API response |
+| `generate_sample_data()` | Create test dataset |
+
+---
+
+### 🔧 `utils.R` - Utility Functions
+**~500+ lines** | Helper functions and data transformations
+
+**Categories:**
+- **Input Validation**: Numeric bounds checking, coordinate validation
+- **Unit Conversions**: Temperature, precipitation, wind speed, elevation
+- **Climate Utilities**: Zone classification, hemisphere, seasons, daylight hours
+- **Statistical Utilities**: CI, CV, normalization, mode, weighted mean
+- **String Utilities**: Percentage formatting, ID generation
+- **Date/Time Utilities**: Day of year, leap year, days in month
+- **File Utilities**: Validation, directory creation, timestamps
+- **Logging Utilities**: Timestamped log messages
+
+---
 
 ### 📈 `data.csv`
 Classification results containing:
