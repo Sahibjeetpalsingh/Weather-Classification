@@ -1,17 +1,6 @@
-# =============================================================================
-# ADVANCED VISUALIZATION FUNCTIONS FOR RENEWABLE ENERGY CLASSIFIER
-# =============================================================================
-# Author: Sahibjeet Pal Singh
-# Date: December 2025
-# Description: Comprehensive visualization library for creating publication-
-#              quality plots, interactive charts, and geographic maps
-# =============================================================================
-
-# =============================================================================
-# PACKAGE DEPENDENCIES
-# =============================================================================
-
-#' Load visualization packages
+﻿# Visualization Functions
+# Plotting and charting for renewable energy analysis
+# Load plotting packages
 load_viz_packages <- function() {
   required_packages <- c(
     "ggplot2",      # Core plotting
@@ -23,7 +12,6 @@ load_viz_packages <- function() {
     "ggthemes",     # Additional themes
     "ggrepel"       # Text label repulsion
   )
-  
   # Load available packages
   for (pkg in required_packages) {
     if (pkg %in% installed.packages()[, "Package"]) {
@@ -31,18 +19,8 @@ load_viz_packages <- function() {
     }
   }
 }
-
 # Load packages
 load_viz_packages()
-
-# =============================================================================
-# THEME DEFINITIONS
-# =============================================================================
-
-#' Custom theme for renewable energy visualizations
-#' @param base_size Base font size
-#' @param base_family Base font family
-#' @return ggplot2 theme
 theme_energy <- function(base_size = 12, base_family = "") {
   theme_minimal(base_size = base_size, base_family = base_family) +
     theme(
@@ -65,31 +43,23 @@ theme_energy <- function(base_size = 12, base_family = "") {
         hjust = 1,
         margin = margin(t = 10)
       ),
-      
       # Axis styling
       axis.title = element_text(size = base_size * 0.9, face = "bold"),
       axis.text = element_text(size = base_size * 0.85),
       axis.line = element_line(color = "gray80", linewidth = 0.5),
-      
       # Legend styling
       legend.title = element_text(size = base_size * 0.9, face = "bold"),
       legend.text = element_text(size = base_size * 0.85),
       legend.position = "bottom",
       legend.box = "horizontal",
-      
       # Panel styling
       panel.grid.major = element_line(color = "gray90", linewidth = 0.3),
       panel.grid.minor = element_blank(),
       panel.background = element_rect(fill = "white", color = NA),
-      
       # Plot margins
       plot.margin = margin(20, 20, 20, 20)
     )
 }
-
-#' Dark theme variant
-#' @param base_size Base font size
-#' @return ggplot2 theme
 theme_energy_dark <- function(base_size = 12) {
   theme_energy(base_size) +
     theme(
@@ -102,14 +72,6 @@ theme_energy_dark <- function(base_size = 12) {
       legend.background = element_rect(fill = "#1a1a1a", color = NA)
     )
 }
-
-# =============================================================================
-# COLOR PALETTES
-# =============================================================================
-
-#' Get energy type color palette
-#' @param type Palette type: "main", "light", "dark", or "gradient"
-#' @return Named vector of colors
 energy_colors <- function(type = "main") {
   palettes <- list(
     main = c(
@@ -133,14 +95,8 @@ energy_colors <- function(type = "main") {
       hydro = c("#eff6ff", "#2563eb", "#1e3a8a")
     )
   )
-  
   return(palettes[[type]])
 }
-
-#' Get sequential color palette for heatmaps
-#' @param n Number of colors
-#' @param palette Palette name
-#' @return Vector of colors
 sequential_palette <- function(n = 9, palette = "viridis") {
   switch(palette,
          viridis = viridis::viridis(n),
@@ -152,16 +108,6 @@ sequential_palette <- function(n = 9, palette = "viridis") {
          oranges = colorRampPalette(c("#fff7ed", "#9a3412"))(n)
   )
 }
-
-# =============================================================================
-# BAR CHARTS
-# =============================================================================
-
-#' Create distribution bar chart
-#' @param df Classified dataframe
-#' @param show_percentages Whether to show percentage labels
-#' @param horizontal Whether to make horizontal bars
-#' @return ggplot object
 create_distribution_chart <- function(df, show_percentages = TRUE, horizontal = FALSE) {
   # Prepare data
   plot_data <- df %>%
@@ -174,7 +120,6 @@ create_distribution_chart <- function(df, show_percentages = TRUE, horizontal = 
         as.character(count)
       }
     )
-  
   # Create base plot
   p <- ggplot(plot_data, aes(
     x = reorder(best_resource, -count),
@@ -198,20 +143,14 @@ create_distribution_chart <- function(df, show_percentages = TRUE, horizontal = 
       caption = "Source: GHCN Weather Data"
     ) +
     theme_energy()
-  
   # Adjust for orientation
   if (horizontal) {
     p <- p + coord_flip()
   } else {
     p <- p + expand_limits(y = max(plot_data$count) * 1.2)
   }
-  
   return(p)
 }
-
-#' Create grouped bar chart comparing scores
-#' @param df Classified dataframe
-#' @return ggplot object
 create_score_bars <- function(df) {
   # Calculate mean scores
   score_data <- df %>%
@@ -221,7 +160,6 @@ create_score_bars <- function(df) {
       Hydro = mean(hydro_score, na.rm = TRUE)
     ) %>%
     pivot_longer(everything(), names_to = "energy_type", values_to = "mean_score")
-  
   # Add max scores
   score_data <- score_data %>%
     mutate(
@@ -232,7 +170,6 @@ create_score_bars <- function(df) {
       ),
       percentage = mean_score / max_score * 100
     )
-  
   # Create plot
   ggplot(score_data, aes(x = energy_type, y = mean_score, fill = energy_type)) +
     geom_col(width = 0.7) +
@@ -253,15 +190,6 @@ create_score_bars <- function(df) {
     theme_energy() +
     theme(legend.position = "none")
 }
-
-# =============================================================================
-# BOXPLOTS AND DISTRIBUTIONS
-# =============================================================================
-
-#' Create score distribution boxplot
-#' @param df Classified dataframe
-#' @param show_points Whether to show individual data points
-#' @return ggplot object
 create_score_boxplot <- function(df, show_points = TRUE) {
   # Reshape data
   score_data <- df %>%
@@ -279,7 +207,6 @@ create_score_boxplot <- function(df, show_points = TRUE) {
       ),
       energy_type = factor(energy_type, levels = c("Solar", "Wind", "Hydro"))
     )
-  
   # Create plot
   p <- ggplot(score_data, aes(x = energy_type, y = score, fill = energy_type)) +
     geom_boxplot(
@@ -287,7 +214,6 @@ create_score_boxplot <- function(df, show_points = TRUE) {
       outlier.shape = if (show_points) NA else 21,
       width = 0.6
     )
-  
   if (show_points) {
     p <- p + geom_jitter(
       width = 0.15,
@@ -296,7 +222,6 @@ create_score_boxplot <- function(df, show_points = TRUE) {
       color = "gray30"
     )
   }
-  
   p <- p +
     scale_fill_manual(values = energy_colors("main")) +
     labs(
@@ -307,13 +232,8 @@ create_score_boxplot <- function(df, show_points = TRUE) {
     ) +
     theme_energy() +
     theme(legend.position = "none")
-  
   return(p)
 }
-
-#' Create violin plot for score distributions
-#' @param df Classified dataframe
-#' @return ggplot object
 create_score_violin <- function(df) {
   # Reshape data
   score_data <- df %>%
@@ -330,7 +250,6 @@ create_score_violin <- function(df) {
         energy_type == "hydro_score" ~ "Hydro"
       )
     )
-  
   ggplot(score_data, aes(x = energy_type, y = score, fill = energy_type)) +
     geom_violin(alpha = 0.8, trim = FALSE) +
     geom_boxplot(width = 0.15, fill = "white", outlier.shape = NA) +
@@ -351,23 +270,11 @@ create_score_violin <- function(df) {
     theme_energy() +
     theme(legend.position = "none")
 }
-
-# =============================================================================
-# HISTOGRAMS AND DENSITY PLOTS
-# =============================================================================
-
-#' Create histogram of a specific variable
-#' @param df Dataframe with data
-#' @param column Column name to plot
-#' @param bins Number of bins
-#' @param fill_color Fill color
-#' @return ggplot object
 create_histogram <- function(df, column, bins = 30, fill_color = "#3b82f6") {
   # Check column exists
   if (!column %in% names(df)) {
     stop(paste("Column", column, "not found in dataframe"))
   }
-  
   ggplot(df, aes(x = .data[[column]])) +
     geom_histogram(
       bins = bins,
@@ -388,16 +295,10 @@ create_histogram <- function(df, column, bins = 30, fill_color = "#3b82f6") {
     ) +
     theme_energy()
 }
-
-#' Create faceted histogram by energy type
-#' @param df Classified dataframe
-#' @param column Column to plot
-#' @return ggplot object
 create_faceted_histogram <- function(df, column) {
   if (!column %in% names(df) || !"best_resource" %in% names(df)) {
     stop("Required columns not found")
   }
-  
   ggplot(df, aes(x = .data[[column]], fill = best_resource)) +
     geom_histogram(bins = 20, alpha = 0.8, color = "white") +
     facet_wrap(~best_resource, ncol = 1, scales = "free_y") +
@@ -410,11 +311,6 @@ create_faceted_histogram <- function(df, column) {
     theme_energy() +
     theme(legend.position = "none")
 }
-
-#' Create density comparison plot
-#' @param df Classified dataframe
-#' @param column Column to compare
-#' @return ggplot object
 create_density_comparison <- function(df, column) {
   ggplot(df, aes(x = .data[[column]], fill = best_resource, color = best_resource)) +
     geom_density(alpha = 0.4, linewidth = 1) +
@@ -430,17 +326,6 @@ create_density_comparison <- function(df, column) {
     ) +
     theme_energy()
 }
-
-# =============================================================================
-# SCATTER PLOTS
-# =============================================================================
-
-#' Create scatter plot of two variables
-#' @param df Classified dataframe
-#' @param x_var X-axis variable
-#' @param y_var Y-axis variable
-#' @param color_by Variable to color by (default: best_resource)
-#' @return ggplot object
 create_scatter <- function(df, x_var, y_var, color_by = "best_resource") {
   p <- ggplot(df, aes(
     x = .data[[x_var]],
@@ -455,19 +340,11 @@ create_scatter <- function(df, x_var, y_var, color_by = "best_resource") {
       y = y_var
     ) +
     theme_energy()
-  
   if (color_by == "best_resource") {
     p <- p + scale_color_manual(values = energy_colors("main"), name = "Energy Type")
   }
-  
   return(p)
 }
-
-#' Create scatter plot with regression lines
-#' @param df Classified dataframe
-#' @param x_var X-axis variable
-#' @param y_var Y-axis variable
-#' @return ggplot object
 create_scatter_with_regression <- function(df, x_var, y_var) {
   ggplot(df, aes(
     x = .data[[x_var]],
@@ -486,20 +363,10 @@ create_scatter_with_regression <- function(df, x_var, y_var) {
     ) +
     theme_energy()
 }
-
-# =============================================================================
-# GEOGRAPHIC PLOTS
-# =============================================================================
-
-#' Create geographic scatter map
-#' @param df Classified dataframe with lat/lon
-#' @param point_size Size of points
-#' @return ggplot object
 create_geo_scatter <- function(df, point_size = 2) {
   if (!all(c("latitude", "longitude", "best_resource") %in% names(df))) {
     stop("Dataframe must contain latitude, longitude, and best_resource columns")
   }
-  
   ggplot(df, aes(x = longitude, y = latitude, color = best_resource)) +
     geom_point(alpha = 0.6, size = point_size) +
     scale_color_manual(values = energy_colors("main")) +
@@ -514,19 +381,13 @@ create_geo_scatter <- function(df, point_size = 2) {
     coord_fixed(ratio = 1.3) +
     theme(legend.position = "right")
 }
-
-#' Create world map with classifications
-#' @param df Classified dataframe with lat/lon
-#' @return ggplot object
 create_world_map <- function(df) {
   # Get world map data
   if (!requireNamespace("maps", quietly = TRUE)) {
     message("Package 'maps' not installed. Using simple scatter plot.")
     return(create_geo_scatter(df))
   }
-  
   world <- map_data("world")
-  
   ggplot() +
     geom_polygon(
       data = world,
@@ -556,22 +417,17 @@ create_world_map <- function(df) {
     ) +
     coord_fixed(ratio = 1.3, xlim = c(-180, 180), ylim = c(-60, 85))
 }
-
-#' Create latitude band analysis chart
-#' @param df Classified dataframe with latitude
-#' @return ggplot object
 create_latitude_analysis <- function(df) {
   if (!"latitude" %in% names(df)) {
     stop("Dataframe must contain latitude column")
   }
-  
   # Create latitude bands
   lat_data <- df %>%
     mutate(
       lat_band = cut(
         latitude,
         breaks = seq(-90, 90, by = 15),
-        labels = paste0(seq(-90, 75, by = 15), "° to ", seq(-75, 90, by = 15), "°"),
+        labels = paste0(seq(-90, 75, by = 15), "Â° to ", seq(-75, 90, by = 15), "Â°"),
         include.lowest = TRUE
       )
     ) %>%
@@ -580,7 +436,6 @@ create_latitude_analysis <- function(df) {
     group_by(lat_band) %>%
     mutate(percentage = n / sum(n) * 100) %>%
     ungroup()
-  
   ggplot(lat_data, aes(x = lat_band, y = percentage, fill = best_resource)) +
     geom_col(position = "stack") +
     scale_fill_manual(values = energy_colors("main")) +
@@ -594,15 +449,6 @@ create_latitude_analysis <- function(df) {
     theme_energy() +
     theme(axis.text.x = element_text(angle = 45, hjust = 1))
 }
-
-# =============================================================================
-# HEATMAPS
-# =============================================================================
-
-#' Create correlation heatmap
-#' @param df Dataframe with numeric columns
-#' @param variables Vector of variable names to include
-#' @return ggplot object
 create_correlation_heatmap <- function(df, variables = NULL) {
   # Select numeric columns
   if (is.null(variables)) {
@@ -610,14 +456,11 @@ create_correlation_heatmap <- function(df, variables = NULL) {
   } else {
     numeric_df <- df %>% select(all_of(variables))
   }
-  
   # Calculate correlation matrix
   cor_matrix <- cor(numeric_df, use = "pairwise.complete.obs")
-  
   # Reshape for plotting
   cor_data <- as.data.frame(as.table(cor_matrix))
   names(cor_data) <- c("Var1", "Var2", "Correlation")
-  
   ggplot(cor_data, aes(x = Var1, y = Var2, fill = Correlation)) +
     geom_tile(color = "white") +
     geom_text(
@@ -645,10 +488,6 @@ create_correlation_heatmap <- function(df, variables = NULL) {
     ) +
     coord_fixed()
 }
-
-#' Create score heatmap by climate zone
-#' @param df Classified dataframe with latitude
-#' @return ggplot object
 create_climate_heatmap <- function(df) {
   # Add climate zone
   heatmap_data <- df %>%
@@ -672,7 +511,6 @@ create_climate_heatmap <- function(df) {
       names_to = "energy_type",
       values_to = "avg_score"
     )
-  
   ggplot(heatmap_data, aes(x = energy_type, y = climate_zone, fill = avg_score)) +
     geom_tile(color = "white", linewidth = 1) +
     geom_text(
@@ -692,17 +530,7 @@ create_climate_heatmap <- function(df) {
     theme(panel.grid = element_blank()) +
     coord_fixed()
 }
-
-# =============================================================================
 # RADAR/SPIDER CHARTS
-# =============================================================================
-
-#' Create radar chart for single location
-#' @param solar_score Solar score
-#' @param wind_score Wind score
-#' @param hydro_score Hydro score
-#' @param title Chart title
-#' @return ggplot object
 create_radar_chart <- function(solar_score, wind_score, hydro_score, 
                                 title = "Energy Potential Profile") {
   # Normalize scores to percentage
@@ -711,20 +539,15 @@ create_radar_chart <- function(solar_score, wind_score, hydro_score,
     score = c(solar_score / 9, wind_score / 7, hydro_score / 8) * 100,
     max_score = c(9, 7, 8)
   )
-  
   # Create circular coordinates
   n <- nrow(data)
   angles <- seq(0, 2 * pi, length.out = n + 1)[1:n]
-  
   data$x <- data$score * cos(angles - pi/2)
   data$y <- data$score * sin(angles - pi/2)
-  
   # Create polygon data
   polygon_data <- rbind(data, data[1, ])
-  
   # Grid circles
   grid_levels <- c(25, 50, 75, 100)
-  
   ggplot() +
     # Grid circles
     lapply(grid_levels, function(r) {
@@ -784,33 +607,20 @@ create_radar_chart <- function(solar_score, wind_score, hydro_score,
       plot.margin = margin(20, 20, 20, 20)
     )
 }
-
-# =============================================================================
-# COMPOSITE VISUALIZATIONS
-# =============================================================================
-
-#' Create comprehensive dashboard of all visualizations
-#' @param df Classified dataframe
-#' @return Combined ggplot object (requires patchwork package)
 create_dashboard <- function(df) {
   if (!requireNamespace("patchwork", quietly = TRUE)) {
     stop("Package 'patchwork' required for dashboard. Install with install.packages('patchwork')")
   }
-  
   library(patchwork)
-  
   # Create individual plots
   p1 <- create_distribution_chart(df)
   p2 <- create_score_boxplot(df, show_points = FALSE)
-  
   if (all(c("latitude", "longitude") %in% names(df))) {
     p3 <- create_geo_scatter(df, point_size = 1)
   } else {
     p3 <- create_score_bars(df)
   }
-  
   p4 <- create_score_violin(df)
-  
   # Combine plots
   dashboard <- (p1 + p2) / (p3 + p4) +
     plot_annotation(
@@ -822,20 +632,8 @@ create_dashboard <- function(df) {
         plot.subtitle = element_text(size = 14, color = "gray50")
       )
     )
-  
   return(dashboard)
 }
-
-# =============================================================================
-# EXPORT FUNCTIONS
-# =============================================================================
-
-#' Save plot with consistent settings
-#' @param plot ggplot object
-#' @param filename Output filename
-#' @param width Width in inches
-#' @param height Height in inches
-#' @param dpi Resolution
 save_plot <- function(plot, filename, width = 10, height = 6, dpi = 300) {
   ggsave(
     filename = filename,
@@ -845,59 +643,38 @@ save_plot <- function(plot, filename, width = 10, height = 6, dpi = 300) {
     dpi = dpi,
     bg = "white"
   )
-  message("✓ Saved plot to: ", filename)
+  message("âœ“ Saved plot to: ", filename)
 }
-
-#' Generate and save all standard visualizations
-#' @param df Classified dataframe
-#' @param output_dir Output directory for plots
 generate_all_plots <- function(df, output_dir = "plots") {
   # Create output directory
   if (!dir.exists(output_dir)) {
     dir.create(output_dir, recursive = TRUE)
   }
-  
   message("Generating visualizations...")
-  
   # Distribution chart
   p <- create_distribution_chart(df)
   save_plot(p, file.path(output_dir, "distribution.png"))
-  
   # Score boxplot
   p <- create_score_boxplot(df)
   save_plot(p, file.path(output_dir, "score_boxplot.png"))
-  
   # Score violin
   p <- create_score_violin(df)
   save_plot(p, file.path(output_dir, "score_violin.png"))
-  
   # Score bars
   p <- create_score_bars(df)
   save_plot(p, file.path(output_dir, "score_bars.png"))
-  
   # Geographic plots (if coordinates available)
   if (all(c("latitude", "longitude") %in% names(df))) {
     p <- create_geo_scatter(df)
     save_plot(p, file.path(output_dir, "geographic_scatter.png"), width = 12, height = 8)
-    
     p <- create_latitude_analysis(df)
     save_plot(p, file.path(output_dir, "latitude_analysis.png"))
   }
-  
   # Climate heatmap (if latitude available)
   if ("latitude" %in% names(df)) {
     p <- create_climate_heatmap(df)
     save_plot(p, file.path(output_dir, "climate_heatmap.png"), width = 8, height = 6)
   }
-  
-  message("✓ All visualizations saved to: ", output_dir)
+  message("âœ“ All visualizations saved to: ", output_dir)
 }
-
-# =============================================================================
-# PRINT VERSION INFO
-# =============================================================================
-
-cat("📊 Visualization Functions v1.0.0 loaded\n")
-cat("   Themes: theme_energy(), theme_energy_dark()\n")
-cat("   Palettes: energy_colors(), sequential_palette()\n")
-cat("   Charts: 15+ visualization functions available\n\n")
+# Viz functions loaded
