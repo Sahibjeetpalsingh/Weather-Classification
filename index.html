@@ -1,0 +1,1631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Renewable Energy Classifier</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Fraunces:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #fafaf9;
+      --text: #1c1917;
+      --muted: #78716c;
+      --border: #e7e5e4;
+      --solar: #ea580c;
+      --solar-light: #fff7ed;
+      --wind: #0891b2;
+      --wind-light: #ecfeff;
+      --hydro: #2563eb;
+      --hydro-light: #eff6ff;
+      --card: #ffffff;
+      --success: #16a34a;
+      --success-light: #f0fdf4;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    h1 {
+      font-family: 'Fraunces', serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.75rem;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto 1.5rem;
+    }
+
+    .intro-stats {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .intro-stat {
+      text-align: center;
+    }
+
+    .intro-stat-value {
+      font-family: 'Fraunces', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .intro-stat-label {
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    @media (max-width: 900px) {
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+      h1 {
+        font-size: 1.8rem;
+      }
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+    }
+
+    .card-title {
+      font-family: 'Fraunces', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .card-title::before {
+      content: '';
+      width: 4px;
+      height: 18px;
+      background: var(--text);
+      border-radius: 2px;
+    }
+
+    /* Presets */
+    .presets {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .preset-btn {
+      padding: 0.4rem 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: var(--bg);
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    .preset-btn:hover {
+      border-color: var(--text);
+      background: var(--card);
+    }
+
+    .preset-btn.active {
+      background: var(--text);
+      color: white;
+      border-color: var(--text);
+    }
+
+    .input-group {
+      margin-bottom: 1rem;
+    }
+
+    .input-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 0.4rem;
+    }
+
+    .input-label span:first-child {
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .input-value {
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: var(--border);
+      outline: none;
+      -webkit-appearance: none;
+      cursor: pointer;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--text);
+      cursor: pointer;
+      transition: transform 0.15s ease;
+    }
+
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+    }
+
+    .input-hint {
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-top: 0.25rem;
+    }
+
+    /* Results */
+    .best-resource {
+      text-align: center;
+      padding: 1.5rem 1rem;
+      border-radius: 12px;
+      margin-bottom: 1.25rem;
+      transition: background 0.3s;
+    }
+
+    .best-resource.solar-bg { background: var(--solar-light); }
+    .best-resource.wind-bg { background: var(--wind-light); }
+    .best-resource.hydro-bg { background: var(--hydro-light); }
+
+    .best-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .best-value {
+      font-family: 'Fraunces', serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+    }
+
+    .best-value.solar { color: var(--solar); }
+    .best-value.wind { color: var(--wind); }
+    .best-value.hydro { color: var(--hydro); }
+
+    .confidence {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 0.25rem;
+    }
+
+    .scores-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .score-item {
+      text-align: center;
+      padding: 0.75rem 0.5rem;
+      border-radius: 10px;
+      background: #fafaf9;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .score-item.winner {
+      transform: scale(1.02);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .score-icon {
+      font-size: 1.25rem;
+      margin-bottom: 0.15rem;
+    }
+
+    .score-name {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      margin-bottom: 0.15rem;
+    }
+
+    .score-value {
+      font-family: 'Fraunces', serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .score-item.solar .score-value { color: var(--solar); }
+    .score-item.wind .score-value { color: var(--wind); }
+    .score-item.hydro .score-value { color: var(--hydro); }
+
+    .score-bar {
+      height: 3px;
+      background: var(--border);
+      border-radius: 2px;
+      margin-top: 0.4rem;
+      overflow: hidden;
+    }
+
+    .score-bar-fill {
+      height: 100%;
+      border-radius: 2px;
+      transition: width 0.3s ease;
+    }
+
+    .score-bar-fill.solar { background: var(--solar); }
+    .score-bar-fill.wind { background: var(--wind); }
+    .score-bar-fill.hydro { background: var(--hydro); }
+
+    .score-max {
+      font-size: 0.65rem;
+      color: var(--muted);
+      margin-top: 0.2rem;
+    }
+
+    /* Breakdown */
+    .breakdown-section {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .breakdown-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .breakdown-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+    }
+
+    .breakdown-col {
+      font-size: 0.7rem;
+    }
+
+    .breakdown-col-title {
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+      padding-bottom: 0.25rem;
+      border-bottom: 2px solid;
+    }
+
+    .breakdown-col.solar .breakdown-col-title { border-color: var(--solar); color: var(--solar); }
+    .breakdown-col.wind .breakdown-col-title { border-color: var(--wind); color: var(--wind); }
+    .breakdown-col.hydro .breakdown-col-title { border-color: var(--hydro); color: var(--hydro); }
+
+    .breakdown-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.2rem 0;
+      color: var(--muted);
+    }
+
+    .breakdown-item.active {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .breakdown-item .pts {
+      font-weight: 600;
+    }
+
+    .breakdown-item.active.solar .pts { color: var(--solar); }
+    .breakdown-item.active.wind .pts { color: var(--wind); }
+    .breakdown-item.active.hydro .pts { color: var(--hydro); }
+
+    /* Section titles */
+    .section-title {
+      font-family: 'Fraunces', serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-subtitle {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-top: -1rem;
+      margin-bottom: 2rem;
+    }
+
+    /* Interpretation */
+    .interpretation {
+      background: var(--success-light);
+      border: 1px solid #bbf7d0;
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin-bottom: 3rem;
+    }
+
+    .interpretation-title {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .interpretation-text {
+      font-size: 0.9rem;
+      color: #166534;
+      line-height: 1.6;
+    }
+
+    /* Charts */
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    @media (max-width: 768px) {
+      .charts-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .chart-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.25rem;
+    }
+
+    .chart-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      text-align: center;
+    }
+
+    .chart-container {
+      position: relative;
+      height: 160px;
+    }
+
+    .chart-container canvas {
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    .legend {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .legend-dot.solar { background: var(--solar); }
+    .legend-dot.wind { background: var(--wind); }
+    .legend-dot.hydro { background: var(--hydro); }
+
+    /* Energy info cards */
+    .energy-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    @media (max-width: 900px) {
+      .energy-cards {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .energy-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .energy-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+    }
+
+    .energy-card-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .energy-card-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+
+    .energy-card.solar .energy-card-icon { background: var(--solar-light); }
+    .energy-card.wind .energy-card-icon { background: var(--wind-light); }
+    .energy-card.hydro .energy-card-icon { background: var(--hydro-light); }
+
+    .energy-card-title {
+      font-family: 'Fraunces', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .energy-card.solar .energy-card-title { color: var(--solar); }
+    .energy-card.wind .energy-card-title { color: var(--wind); }
+    .energy-card.hydro .energy-card-title { color: var(--hydro); }
+
+    .energy-card-desc {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 1rem;
+      line-height: 1.5;
+    }
+
+    .energy-card-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      padding: 0.75rem;
+      background: var(--bg);
+      border-radius: 8px;
+    }
+
+    .energy-stat {
+      text-align: center;
+    }
+
+    .energy-stat-value {
+      font-family: 'Fraunces', serif;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .energy-stat-label {
+      font-size: 0.65rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .energy-card-criteria {
+      font-size: 0.8rem;
+    }
+
+    .energy-card-criteria-title {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+    }
+
+    .criteria-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.3rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .criteria-item:last-child {
+      border-bottom: none;
+    }
+
+    .criteria-condition {
+      color: var(--muted);
+    }
+
+    .criteria-points {
+      font-weight: 600;
+    }
+
+    .energy-card.solar .criteria-points { color: var(--solar); }
+    .energy-card.wind .criteria-points { color: var(--wind); }
+    .energy-card.hydro .criteria-points { color: var(--hydro); }
+
+    /* Facts section */
+    .facts-section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .facts-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    @media (max-width: 900px) {
+      .facts-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 500px) {
+      .facts-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .fact-item {
+      text-align: center;
+      padding: 1rem;
+      background: var(--bg);
+      border-radius: 12px;
+    }
+
+    .fact-value {
+      font-family: 'Fraunces', serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .fact-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 0.25rem;
+    }
+
+    /* Locations */
+    .locations-section {
+      margin-bottom: 3rem;
+    }
+
+    .locations-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .locations-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .location-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem;
+    }
+
+    .location-card-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .location-flag {
+      font-size: 1.25rem;
+    }
+
+    .location-name {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .location-type {
+      font-size: 0.75rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 10px;
+      font-weight: 500;
+    }
+
+    .location-type.solar { background: var(--solar-light); color: var(--solar); }
+    .location-type.wind { background: var(--wind-light); color: var(--wind); }
+    .location-type.hydro { background: var(--hydro-light); color: var(--hydro); }
+
+    .location-details {
+      font-size: 0.75rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* Tips */
+    .tips-section {
+      background: linear-gradient(135deg, #fef3c7, #fde68a);
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .tips-title {
+      font-family: 'Fraunces', serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .tips-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .tips-list {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .tip-item {
+      display: flex;
+      gap: 0.75rem;
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+
+    .tip-icon {
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: var(--muted);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Renewable Energy Classifier</h1>
+      <p class="subtitle">
+        Determine the optimal renewable energy source based on climate and geographic conditions using scientific scoring algorithms
+      </p>
+      <div class="intro-stats">
+        <div class="intro-stat">
+          <div class="intro-stat-value">5</div>
+          <div class="intro-stat-label">Parameters</div>
+        </div>
+        <div class="intro-stat">
+          <div class="intro-stat-value">3</div>
+          <div class="intro-stat-label">Energy Types</div>
+        </div>
+        <div class="intro-stat">
+          <div class="intro-stat-value">24</div>
+          <div class="intro-stat-label">Max Score</div>
+        </div>
+        <div class="intro-stat">
+          <div class="intro-stat-value">8</div>
+          <div class="intro-stat-label">Presets</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="main-grid">
+      <div class="card">
+        <h2 class="card-title">Parameters</h2>
+        
+        <div class="presets">
+          <button class="preset-btn" data-preset="desert">🏜️ Desert</button>
+          <button class="preset-btn" data-preset="coastal">🌊 Coastal</button>
+          <button class="preset-btn" data-preset="mountain">🏔️ Mountain</button>
+          <button class="preset-btn" data-preset="tropical">🌴 Tropical</button>
+          <button class="preset-btn" data-preset="arctic">❄️ Arctic</button>
+          <button class="preset-btn" data-preset="plains">🌾 Plains</button>
+          <button class="preset-btn" data-preset="mediterranean">🍇 Mediterranean</button>
+          <button class="preset-btn" data-preset="monsoon">🌧️ Monsoon</button>
+        </div>
+        
+        <div class="input-group">
+          <div class="input-label">
+            <span>Average Temperature</span>
+            <span class="input-value" id="temp-value">20°C</span>
+          </div>
+          <input type="range" id="temp" min="-20" max="45" value="20">
+          <div class="input-hint">Typical daily average temperature for the region</div>
+        </div>
+
+        <div class="input-group">
+          <div class="input-label">
+            <span>Wind Speed</span>
+            <span class="input-value" id="wind-value">5 m/s</span>
+          </div>
+          <input type="range" id="wind" min="0" max="20" step="0.5" value="5">
+          <div class="input-hint">Average wind speed at hub height (~80-100m)</div>
+        </div>
+
+        <div class="input-group">
+          <div class="input-label">
+            <span>Precipitation</span>
+            <span class="input-value" id="precip-value">60 mm</span>
+          </div>
+          <input type="range" id="precip" min="0" max="200" value="60">
+          <div class="input-hint">Monthly average rainfall/precipitation</div>
+        </div>
+
+        <div class="input-group">
+          <div class="input-label">
+            <span>Elevation</span>
+            <span class="input-value" id="elev-value">500 m</span>
+          </div>
+          <input type="range" id="elev" min="0" max="3000" step="50" value="500">
+          <div class="input-hint">Height above sea level</div>
+        </div>
+
+        <div class="input-group">
+          <div class="input-label">
+            <span>Snow Depth</span>
+            <span class="input-value" id="snow-value">5 cm</span>
+          </div>
+          <input type="range" id="snow" min="0" max="100" value="5">
+          <div class="input-hint">Average snow accumulation depth</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 class="card-title">Results</h2>
+        
+        <div class="best-resource solar-bg" id="best-resource-container">
+          <div class="best-label">Recommended Energy Source</div>
+          <div class="best-value solar" id="best-resource">☀️ Solar</div>
+          <div class="confidence" id="confidence">High confidence (clear winner)</div>
+        </div>
+
+        <div class="scores-grid">
+          <div class="score-item solar" id="solar-item">
+            <div class="score-icon">☀️</div>
+            <div class="score-name">Solar</div>
+            <div class="score-value" id="solar-score">0</div>
+            <div class="score-bar">
+              <div class="score-bar-fill solar" id="solar-bar"></div>
+            </div>
+            <div class="score-max">/ 9 max</div>
+          </div>
+          <div class="score-item wind" id="wind-item">
+            <div class="score-icon">💨</div>
+            <div class="score-name">Wind</div>
+            <div class="score-value" id="wind-score">0</div>
+            <div class="score-bar">
+              <div class="score-bar-fill wind" id="wind-bar"></div>
+            </div>
+            <div class="score-max">/ 7 max</div>
+          </div>
+          <div class="score-item hydro" id="hydro-item">
+            <div class="score-icon">💧</div>
+            <div class="score-name">Hydro</div>
+            <div class="score-value" id="hydro-score">0</div>
+            <div class="score-bar">
+              <div class="score-bar-fill hydro" id="hydro-bar"></div>
+            </div>
+            <div class="score-max">/ 8 max</div>
+          </div>
+        </div>
+
+        <div class="breakdown-section">
+          <div class="breakdown-title">📊 Score Breakdown</div>
+          <div class="breakdown-grid">
+            <div class="breakdown-col solar">
+              <div class="breakdown-col-title">Solar</div>
+              <div id="solar-breakdown"></div>
+            </div>
+            <div class="breakdown-col wind">
+              <div class="breakdown-col-title">Wind</div>
+              <div id="wind-breakdown"></div>
+            </div>
+            <div class="breakdown-col hydro">
+              <div class="breakdown-col-title">Hydro</div>
+              <div id="hydro-breakdown"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="interpretation" id="interpretation">
+      <div class="interpretation-title">💡 Analysis</div>
+      <div class="interpretation-text" id="interpretation-text">
+        Based on your parameters, solar energy is the optimal choice...
+      </div>
+    </div>
+
+    <h2 class="section-title">Score Relationships</h2>
+    <p class="section-subtitle">See how changing each parameter affects energy scores</p>
+    
+    <div class="charts-grid">
+      <div class="chart-card">
+        <h3 class="chart-title">Score vs Temperature (°C)</h3>
+        <div class="chart-container">
+          <canvas id="chart-temp"></canvas>
+        </div>
+        <div class="legend">
+          <div class="legend-item"><div class="legend-dot solar"></div>Solar</div>
+          <div class="legend-item"><div class="legend-dot wind"></div>Wind</div>
+          <div class="legend-item"><div class="legend-dot hydro"></div>Hydro</div>
+        </div>
+      </div>
+      <div class="chart-card">
+        <h3 class="chart-title">Score vs Wind Speed (m/s)</h3>
+        <div class="chart-container">
+          <canvas id="chart-wind"></canvas>
+        </div>
+        <div class="legend">
+          <div class="legend-item"><div class="legend-dot solar"></div>Solar</div>
+          <div class="legend-item"><div class="legend-dot wind"></div>Wind</div>
+          <div class="legend-item"><div class="legend-dot hydro"></div>Hydro</div>
+        </div>
+      </div>
+      <div class="chart-card">
+        <h3 class="chart-title">Score vs Precipitation (mm)</h3>
+        <div class="chart-container">
+          <canvas id="chart-precip"></canvas>
+        </div>
+        <div class="legend">
+          <div class="legend-item"><div class="legend-dot solar"></div>Solar</div>
+          <div class="legend-item"><div class="legend-dot wind"></div>Wind</div>
+          <div class="legend-item"><div class="legend-dot hydro"></div>Hydro</div>
+        </div>
+      </div>
+      <div class="chart-card">
+        <h3 class="chart-title">Score vs Elevation (m)</h3>
+        <div class="chart-container">
+          <canvas id="chart-elev"></canvas>
+        </div>
+        <div class="legend">
+          <div class="legend-item"><div class="legend-dot solar"></div>Solar</div>
+          <div class="legend-item"><div class="legend-dot wind"></div>Wind</div>
+          <div class="legend-item"><div class="legend-dot hydro"></div>Hydro</div>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="section-title">Energy Source Details</h2>
+    <p class="section-subtitle">Detailed information about each renewable energy type</p>
+
+    <div class="energy-cards">
+      <div class="energy-card solar">
+        <div class="energy-card-header">
+          <div class="energy-card-icon">☀️</div>
+          <div class="energy-card-title">Solar Energy</div>
+        </div>
+        <p class="energy-card-desc">
+          Harnesses sunlight through photovoltaic cells or concentrated solar power. Best suited for regions with high solar irradiance, low cloud cover, and minimal precipitation.
+        </p>
+        <div class="energy-card-stats">
+          <div class="energy-stat">
+            <div class="energy-stat-value">20-25%</div>
+            <div class="energy-stat-label">Panel Efficiency</div>
+          </div>
+          <div class="energy-stat">
+            <div class="energy-stat-value">25+ yrs</div>
+            <div class="energy-stat-label">Lifespan</div>
+          </div>
+          <div class="energy-stat">
+            <div class="energy-stat-value">~$0.03</div>
+            <div class="energy-stat-label">Cost/kWh</div>
+          </div>
+          <div class="energy-stat">
+            <div class="energy-stat-value">48g</div>
+            <div class="energy-stat-label">CO₂/kWh</div>
+          </div>
+        </div>
+        <div class="energy-card-criteria">
+          <div class="energy-card-criteria-title">Scoring Criteria</div>
+          <div class="criteria-item">
+            <span class="criteria-condition">Temperature &gt; 15°C</span>
+            <span class="criteria-points">+3 pts</span>
+          </div>
+          <div class="criteria-item">
+            <span class="criteria-condition">Temperature &gt; 25°C</span>
+            <span class="criteria-points">+2 pts</span>
+          </div>
+          <div class="criteria-item">
+            <span class="criteria-condition">Precipitation &lt; 50mm</span>
+            <span class="criteria-points">+2 pts</span>
+          </div>
+          <div class="criteria-item">
+            <span class="criteria-condition">Precipitation &gt; 150mm</span>
+            <span class="criteria-points" style="color: #dc2626;">−3 pts</span>
+          </div>
+          <div class="criteria-item">
+            <span class="criteria-condition">Snow depth &lt; 10cm</span>
+            <span class="criteria-points">+1 pt</span>
+          </div>
+          <div class="criteria-item">
+            <span class="criteria-condition">Elevation &lt; 2000m</span>
+            <span class="criteria-points">+1 pt</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="energy-card wind">
+        <div class="energy-card-header">
+          <div class="energy-card-icon">💨</div>
+          <div class="energy-card-title">Wind Energy</div>
+        </div>
+        <p class="energy-card-desc">
+          Converts kinetic wind energy into electricity via turbines. Ideal for open plains, coastal areas, and elevated ridges with consistent wind patterns.
+        </p>
+        <div class="energy-card-stats">
+          <div class="energy-stat">
+            <div class="energy-stat-value">35-45%</div>
+            <div class="energy-stat-label">Capacity Factor</div>
+          </div>
+          <div class="energy-stat">
+            <div class="energy-stat-value">20-25 yrs</div>
+            <div class="energy-stat-label">Lifespan</div>
+          </div>
+          <div class="energy-stat">
+            <div class="energy-stat-value">~$0.04</div>
+            <div class="energy-stat-label">Cost/kWh</div>
+          </div>
+          <div class="energy-stat">
+            <div class="energy-stat-value">11g</div>
+            <div class="energy-stat-label">CO₂/kWh</div>
+          </div>
+        </div>
+        <div class="energy-card-criteria">
+          <div class="energy-card-criteria-title">Scoring Criteria</div>
+          <div class="criteria-item">
+            <span class="criteria-condition">Wind speed ≥ 4 m/s</span>
+            <span class="criteria-points">+2 pts</span>
+          </div>
+          <div class="criteria-item">
+            <span class="criteria-condition">Wind speed ≥ 6 m/s</span>
+            <span class="criteria-points">+3 pts</span>
+          </div>
+          <div class="criteria-item">
+            <span class="criteria-condition">Elevation 500-2000m</span>
+            <span class="criteria-points">+1 pt</span>
+          </div>
+          <div class="criteria-item">
+            <span class="criteria-condition">Precipitation &lt; 100mm</span>
+            <span class="criteria-points">+1 pt</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="energy-card hydro">
+        <div class="energy-card-header">
+          <div class="energy-card-icon">💧</div>
+          <div class="energy-card-title">Hydro Energy</div>
+        </div>
+        <p class="energy-card-desc">
+          Generates power from flowing water through turbines. Requires significant water resources from rivers, reservoirs, or seasonal snowmelt.
+        </p>
+        <div class="energy-card-stats">
+          <div class="energy-stat">
+            <div class="energy-stat-value">90%</div>
+            <div class="energy-stat-label">Efficiency</div>
+          </div>
+          <div class="energy-stat">
+            <div class="energy-stat-value">50+ yrs</div>
+            <div class="energy-stat-label">Lifespan</div>
+          </div>
+          <div class="energy-stat">
+            <div class="energy-stat-value">~$0.05</div>
+            <div class="energy-stat-label">Cost/kWh</div>
+          </div>
+          <div class="energy-stat">
+            <div class="energy-stat-value">24g</div>
+            <div class="energy-stat-label">CO₂/kWh</div>
+          </div>
+        </div>
+        <div class="energy-card-criteria">
+          <div class="energy-card-criteria-title">Scoring Criteria</div>
+          <div class="criteria-item">
+            <span class="criteria-condition">Precipitation &gt; 100mm</span>
+            <span class="criteria-points">+2 pts</span>
+          </div>
+          <div class="criteria-item">
+            <span class="criteria-condition">Precipitation &gt; 150mm</span>
+            <span class="criteria-points">+2 pts</span>
+          </div>
+          <div class="criteria-item">
+            <span class="criteria-condition">Snow depth &gt; 20cm</span>
+            <span class="criteria-points">+2 pts</span>
+          </div>
+          <div class="criteria-item">
+            <span class="criteria-condition">Elevation 300-2000m</span>
+            <span class="criteria-points">+2 pts</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="facts-section">
+      <h2 class="section-title">Global Renewable Energy Facts</h2>
+      <div class="facts-grid">
+        <div class="fact-item">
+          <div class="fact-value">30%</div>
+          <div class="fact-label">Global electricity from renewables (2023)</div>
+        </div>
+        <div class="fact-item">
+          <div class="fact-value">1,418 GW</div>
+          <div class="fact-label">Installed solar capacity worldwide</div>
+        </div>
+        <div class="fact-item">
+          <div class="fact-value">906 GW</div>
+          <div class="fact-label">Installed wind capacity worldwide</div>
+        </div>
+        <div class="fact-item">
+          <div class="fact-value">1,392 GW</div>
+          <div class="fact-label">Installed hydro capacity worldwide</div>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="section-title">Example Locations</h2>
+    <p class="section-subtitle">Real-world regions optimized for each energy type</p>
+
+    <div class="locations-section">
+      <div class="locations-grid">
+        <div class="location-card">
+          <div class="location-card-header">
+            <span class="location-flag">🇺🇸</span>
+            <span class="location-name">Mojave Desert, USA</span>
+            <span class="location-type solar">Solar</span>
+          </div>
+          <p class="location-details">
+            High solar irradiance (5.5-7.5 kWh/m²/day), minimal rainfall, 300+ sunny days annually. Home to multiple utility-scale solar farms.
+          </p>
+        </div>
+        <div class="location-card">
+          <div class="location-card-header">
+            <span class="location-flag">🇩🇰</span>
+            <span class="location-name">North Sea, Denmark</span>
+            <span class="location-type wind">Wind</span>
+          </div>
+          <p class="location-details">
+            Consistent 8-10 m/s winds, shallow waters ideal for offshore turbines. Denmark generates 50%+ electricity from wind.
+          </p>
+        </div>
+        <div class="location-card">
+          <div class="location-card-header">
+            <span class="location-flag">🇧🇷</span>
+            <span class="location-name">Itaipu Dam, Brazil</span>
+            <span class="location-type hydro">Hydro</span>
+          </div>
+          <p class="location-details">
+            Paraná River provides massive water flow. Second-largest hydroelectric dam globally, supplying 15% of Brazil's electricity.
+          </p>
+        </div>
+        <div class="location-card">
+          <div class="location-card-header">
+            <span class="location-flag">🇦🇺</span>
+            <span class="location-name">South Australia</span>
+            <span class="location-type solar">Solar</span>
+          </div>
+          <p class="location-details">
+            Semi-arid climate with excellent solar resources. Leading region in rooftop solar adoption with 35%+ household coverage.
+          </p>
+        </div>
+        <div class="location-card">
+          <div class="location-card-header">
+            <span class="location-flag">🇬🇧</span>
+            <span class="location-name">Scottish Highlands</span>
+            <span class="location-type wind">Wind</span>
+          </div>
+          <p class="location-details">
+            Atlantic exposure creates strong, consistent winds. Scotland aims for 100% renewable electricity, primarily from wind.
+          </p>
+        </div>
+        <div class="location-card">
+          <div class="location-card-header">
+            <span class="location-flag">🇳🇴</span>
+            <span class="location-name">Norwegian Fjords</span>
+            <span class="location-type hydro">Hydro</span>
+          </div>
+          <p class="location-details">
+            Steep terrain and abundant rainfall/snowmelt. Norway generates 98% of electricity from hydropower.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="tips-section">
+      <h2 class="tips-title">💡 Optimization Tips</h2>
+      <div class="tips-list">
+        <div class="tip-item">
+          <div class="tip-icon">☀️</div>
+          <div>For solar, south-facing installations (in Northern Hemisphere) with 30-35° tilt angles maximize annual energy capture.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-icon">💨</div>
+          <div>Wind turbines perform best when placed at heights of 80-120m where wind speeds are stronger and more consistent.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-icon">💧</div>
+          <div>Run-of-river hydro systems have lower environmental impact than large dams while still providing reliable baseload power.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-icon">🔋</div>
+          <div>Combining multiple renewable sources (hybrid systems) can provide more consistent power generation year-round.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-icon">📊</div>
+          <div>Consider seasonal variations: solar peaks in summer, wind often peaks in winter, hydro depends on rainfall patterns.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-icon">🌍</div>
+          <div>Local grid infrastructure and land availability are critical factors beyond just climate conditions.</div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>Renewable Energy Classification System • Built for climate-informed energy planning</p>
+      <p style="margin-top: 0.5rem; font-size: 0.75rem;">Based on climate scoring algorithms analyzing temperature, wind, precipitation, elevation & snow depth</p>
+    </footer>
+  </div>
+
+  <script>
+    // Preset configurations
+    var presets = {
+      desert: { temp: 35, wind: 4, precip: 10, elev: 300, snow: 0 },
+      coastal: { temp: 18, wind: 8, precip: 80, elev: 50, snow: 0 },
+      mountain: { temp: 5, wind: 7, precip: 120, elev: 2000, snow: 50 },
+      tropical: { temp: 28, wind: 3, precip: 180, elev: 200, snow: 0 },
+      arctic: { temp: -10, wind: 6, precip: 30, elev: 100, snow: 80 },
+      plains: { temp: 15, wind: 9, precip: 50, elev: 600, snow: 5 },
+      mediterranean: { temp: 22, wind: 4, precip: 40, elev: 400, snow: 0 },
+      monsoon: { temp: 26, wind: 5, precip: 200, elev: 500, snow: 0 }
+    };
+
+    // Energy classification function (matching R logic)
+    function classifyEnergy(tempAvg, windSpeed, precipitation, elevation, snowDepth) {
+      tempAvg = Math.max(Math.min(tempAvg, 50), -20);
+      windSpeed = Math.max(Math.min(windSpeed, 20), 0);
+      precipitation = Math.max(precipitation, 0);
+      snowDepth = snowDepth || 0;
+
+      var solar = { score: 0, breakdown: [] };
+      var wind = { score: 0, breakdown: [] };
+      var hydro = { score: 0, breakdown: [] };
+
+      // Solar Logic
+      if (tempAvg > 15) { solar.score += 3; solar.breakdown.push({ cond: 'Temp >15°C', pts: 3, active: true }); }
+      else { solar.breakdown.push({ cond: 'Temp >15°C', pts: 3, active: false }); }
+      
+      if (tempAvg > 25) { solar.score += 2; solar.breakdown.push({ cond: 'Temp >25°C', pts: 2, active: true }); }
+      else { solar.breakdown.push({ cond: 'Temp >25°C', pts: 2, active: false }); }
+      
+      if (precipitation < 50) { solar.score += 2; solar.breakdown.push({ cond: 'Precip <50mm', pts: 2, active: true }); }
+      else { solar.breakdown.push({ cond: 'Precip <50mm', pts: 2, active: false }); }
+      
+      // Penalize solar for heavy precipitation (cloud cover)
+      if (precipitation > 150) { solar.score -= 3; solar.breakdown.push({ cond: 'Precip >150mm', pts: -3, active: true }); }
+      else { solar.breakdown.push({ cond: 'Precip >150mm', pts: -3, active: false }); }
+      
+      if (snowDepth < 10) { solar.score += 1; solar.breakdown.push({ cond: 'Snow <10cm', pts: 1, active: true }); }
+      else { solar.breakdown.push({ cond: 'Snow <10cm', pts: 1, active: false }); }
+      
+      if (elevation < 2000) { solar.score += 1; solar.breakdown.push({ cond: 'Elev <2000m', pts: 1, active: true }); }
+      else { solar.breakdown.push({ cond: 'Elev <2000m', pts: 1, active: false }); }
+
+      // Wind Logic
+      if (windSpeed >= 4) { wind.score += 2; wind.breakdown.push({ cond: 'Wind ≥4 m/s', pts: 2, active: true }); }
+      else { wind.breakdown.push({ cond: 'Wind ≥4 m/s', pts: 2, active: false }); }
+      
+      if (windSpeed >= 6) { wind.score += 3; wind.breakdown.push({ cond: 'Wind ≥6 m/s', pts: 3, active: true }); }
+      else { wind.breakdown.push({ cond: 'Wind ≥6 m/s', pts: 3, active: false }); }
+      
+      if (elevation > 500 && elevation < 2000) { wind.score += 1; wind.breakdown.push({ cond: 'Elev 500-2000m', pts: 1, active: true }); }
+      else { wind.breakdown.push({ cond: 'Elev 500-2000m', pts: 1, active: false }); }
+      
+      if (precipitation < 100) { wind.score += 1; wind.breakdown.push({ cond: 'Precip <100mm', pts: 1, active: true }); }
+      else { wind.breakdown.push({ cond: 'Precip <100mm', pts: 1, active: false }); }
+
+      // Hydro Logic
+      if (precipitation > 100) { hydro.score += 2; hydro.breakdown.push({ cond: 'Precip >100mm', pts: 2, active: true }); }
+      else { hydro.breakdown.push({ cond: 'Precip >100mm', pts: 2, active: false }); }
+      
+      // Bonus for very high precipitation (monsoon/tropical)
+      if (precipitation > 150) { hydro.score += 2; hydro.breakdown.push({ cond: 'Precip >150mm', pts: 2, active: true }); }
+      else { hydro.breakdown.push({ cond: 'Precip >150mm', pts: 2, active: false }); }
+      
+      if (snowDepth > 20) { hydro.score += 2; hydro.breakdown.push({ cond: 'Snow >20cm', pts: 2, active: true }); }
+      else { hydro.breakdown.push({ cond: 'Snow >20cm', pts: 2, active: false }); }
+      
+      if (elevation > 300 && elevation < 2000) { hydro.score += 2; hydro.breakdown.push({ cond: 'Elev 300-2000m', pts: 2, active: true }); }
+      else { hydro.breakdown.push({ cond: 'Elev 300-2000m', pts: 2, active: false }); }
+
+      return { solar: solar, wind: wind, hydro: hydro };
+    }
+
+    // Get current values
+    function getValues() {
+      return {
+        temp: parseFloat(document.getElementById('temp').value),
+        wind: parseFloat(document.getElementById('wind').value),
+        precip: parseFloat(document.getElementById('precip').value),
+        elev: parseFloat(document.getElementById('elev').value),
+        snow: parseFloat(document.getElementById('snow').value)
+      };
+    }
+
+    // Generate interpretation text
+    function getInterpretation(v, result, best) {
+      var texts = [];
+      
+      if (best === 'Solar') {
+        texts.push('Based on your parameters, <strong>solar energy</strong> is the optimal choice.');
+        if (v.temp > 25) texts.push('The high temperature (' + v.temp + '°C) indicates excellent solar irradiance potential.');
+        if (v.precip < 50) texts.push('Low precipitation means more sunny days and less cloud cover.');
+        if (v.snow < 10) texts.push('Minimal snow accumulation prevents panel coverage issues.');
+      } else if (best === 'Wind') {
+        texts.push('Based on your parameters, <strong>wind energy</strong> is the optimal choice.');
+        if (v.wind >= 6) texts.push('Strong winds (' + v.wind + ' m/s) provide excellent turbine efficiency.');
+        if (v.elev > 500 && v.elev < 2000) texts.push('The moderate elevation creates favorable wind acceleration.');
+      } else {
+        texts.push('Based on your parameters, <strong>hydro energy</strong> is the optimal choice.');
+        if (v.precip > 100) texts.push('High precipitation (' + v.precip + 'mm) ensures abundant water flow.');
+        if (v.snow > 20) texts.push('Significant snow accumulation provides seasonal snowmelt for consistent water supply.');
+        if (v.elev > 300 && v.elev < 2000) texts.push('The elevation range is ideal for creating hydraulic head for power generation.');
+      }
+      
+      // Add comparison
+      var scores = [result.solar.score, result.wind.score, result.hydro.score];
+      var sorted = scores.slice().sort(function(a,b) { return b - a; });
+      if (sorted[0] - sorted[1] <= 1) {
+        texts.push('However, the scores are close—consider a <strong>hybrid approach</strong> combining multiple sources.');
+      }
+      
+      return texts.join(' ');
+    }
+
+    // Render breakdown
+    function renderBreakdown(containerId, breakdown, type) {
+      var container = document.getElementById(containerId);
+      var html = '';
+      for (var i = 0; i < breakdown.length; i++) {
+        var item = breakdown[i];
+        var activeClass = item.active ? 'active ' + type : '';
+        var ptsDisplay = item.active ? (item.pts > 0 ? '+' + item.pts : item.pts) : '0';
+        var ptsStyle = (item.active && item.pts < 0) ? ' style="color: #dc2626;"' : '';
+        html += '<div class="breakdown-item ' + activeClass + '">';
+        html += '<span>' + item.cond + '</span>';
+        html += '<span class="pts"' + ptsStyle + '>' + ptsDisplay + '</span>';
+        html += '</div>';
+      }
+      container.innerHTML = html;
+    }
+
+    // Update display
+    function updateDisplay() {
+      var v = getValues();
+      
+      // Update labels
+      document.getElementById('temp-value').textContent = v.temp + '°C';
+      document.getElementById('wind-value').textContent = v.wind + ' m/s';
+      document.getElementById('precip-value').textContent = v.precip + ' mm';
+      document.getElementById('elev-value').textContent = v.elev + ' m';
+      document.getElementById('snow-value').textContent = v.snow + ' cm';
+
+      // Calculate scores
+      var result = classifyEnergy(v.temp, v.wind, v.precip, v.elev, v.snow);
+
+      // Update scores
+      document.getElementById('solar-score').textContent = result.solar.score;
+      document.getElementById('wind-score').textContent = result.wind.score;
+      document.getElementById('hydro-score').textContent = result.hydro.score;
+
+      // Update bars
+      document.getElementById('solar-bar').style.width = (result.solar.score / 9 * 100) + '%';
+      document.getElementById('wind-bar').style.width = (result.wind.score / 7 * 100) + '%';
+      document.getElementById('hydro-bar').style.width = (result.hydro.score / 8 * 100) + '%';
+
+      // Update breakdowns
+      renderBreakdown('solar-breakdown', result.solar.breakdown, 'solar');
+      renderBreakdown('wind-breakdown', result.wind.breakdown, 'wind');
+      renderBreakdown('hydro-breakdown', result.hydro.breakdown, 'hydro');
+
+      // Remove winner class from all
+      document.getElementById('solar-item').classList.remove('winner');
+      document.getElementById('wind-item').classList.remove('winner');
+      document.getElementById('hydro-item').classList.remove('winner');
+
+      // Determine best
+      var bestEl = document.getElementById('best-resource');
+      var bestContainer = document.getElementById('best-resource-container');
+      var confidenceEl = document.getElementById('confidence');
+      var best = '';
+      
+      var scores = [result.solar.score, result.wind.score, result.hydro.score];
+      var maxScore = Math.max.apply(null, scores);
+      var diff = maxScore - Math.max.apply(null, scores.filter(function(s) { return s !== maxScore; }));
+      
+      if (result.solar.score >= result.wind.score && result.solar.score >= result.hydro.score) {
+        bestEl.textContent = '☀️ Solar Energy';
+        bestEl.className = 'best-value solar';
+        bestContainer.className = 'best-resource solar-bg';
+        document.getElementById('solar-item').classList.add('winner');
+        best = 'Solar';
+      } else if (result.wind.score >= result.hydro.score) {
+        bestEl.textContent = '💨 Wind Energy';
+        bestEl.className = 'best-value wind';
+        bestContainer.className = 'best-resource wind-bg';
+        document.getElementById('wind-item').classList.add('winner');
+        best = 'Wind';
+      } else {
+        bestEl.textContent = '💧 Hydro Energy';
+        bestEl.className = 'best-value hydro';
+        bestContainer.className = 'best-resource hydro-bg';
+        document.getElementById('hydro-item').classList.add('winner');
+        best = 'Hydro';
+      }
+
+      // Confidence
+      if (diff >= 3) {
+        confidenceEl.textContent = 'High confidence (clear winner by ' + diff + '+ points)';
+      } else if (diff >= 2) {
+        confidenceEl.textContent = 'Moderate confidence (ahead by ' + diff + ' points)';
+      } else {
+        confidenceEl.textContent = 'Low confidence (close scores—consider hybrid approach)';
+      }
+
+      // Update interpretation
+      document.getElementById('interpretation-text').innerHTML = getInterpretation(v, result, best);
+
+      // Update charts
+      drawAllCharts();
+    }
+
+    // Draw a simple line chart
+    function drawChart(canvasId, getData, xLabels) {
+      var canvas = document.getElementById(canvasId);
+      var ctx = canvas.getContext('2d');
+      var rect = canvas.parentElement.getBoundingClientRect();
+      
+      var dpr = window.devicePixelRatio || 1;
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.scale(dpr, dpr);
+      
+      var width = rect.width;
+      var height = rect.height;
+      var padding = { top: 15, right: 15, bottom: 25, left: 30 };
+      var chartWidth = width - padding.left - padding.right;
+      var chartHeight = height - padding.top - padding.bottom;
+
+      ctx.clearRect(0, 0, width, height);
+
+      var data = getData();
+      var maxY = 9;
+
+      ctx.strokeStyle = '#e7e5e4';
+      ctx.lineWidth = 1;
+      for (var i = 0; i <= 3; i++) {
+        var y = padding.top + (chartHeight / 3) * i;
+        ctx.beginPath();
+        ctx.moveTo(padding.left, y);
+        ctx.lineTo(width - padding.right, y);
+        ctx.stroke();
+      }
+
+      ctx.fillStyle = '#78716c';
+      ctx.font = '10px DM Sans, sans-serif';
+      ctx.textAlign = 'right';
+      for (var i = 0; i <= 3; i++) {
+        var val = maxY - (maxY / 3) * i;
+        var y = padding.top + (chartHeight / 3) * i;
+        ctx.fillText(Math.round(val), padding.left - 5, y + 3);
+      }
+
+      ctx.textAlign = 'center';
+      var step = Math.max(1, Math.floor(xLabels.length / 5));
+      for (var i = 0; i < xLabels.length; i += step) {
+        var x = padding.left + (chartWidth / (xLabels.length - 1)) * i;
+        ctx.fillText(xLabels[i], x, height - 5);
+      }
+
+      var colors = { solar: '#ea580c', wind: '#0891b2', hydro: '#2563eb' };
+      var types = ['solar', 'wind', 'hydro'];
+      
+      for (var t = 0; t < types.length; t++) {
+        var type = types[t];
+        ctx.strokeStyle = colors[type];
+        ctx.lineWidth = 2;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.beginPath();
+        
+        for (var i = 0; i < data.length; i++) {
+          var x = padding.left + (chartWidth / (data.length - 1)) * i;
+          var y = padding.top + chartHeight - (data[i][type] / maxY) * chartHeight;
+          
+          if (i === 0) {
+            ctx.moveTo(x, y);
+          } else {
+            ctx.lineTo(x, y);
+          }
+        }
+        
+        ctx.stroke();
+      }
+    }
+
+    function generateData(varName, range, step) {
+      var v = getValues();
+      var data = [];
+      for (var val = range[0]; val <= range[1]; val += step) {
+        var params = {
+          temp: v.temp,
+          wind: v.wind,
+          precip: v.precip,
+          elev: v.elev,
+          snow: v.snow
+        };
+        params[varName] = val;
+        var result = classifyEnergy(params.temp, params.wind, params.precip, params.elev, params.snow);
+        data.push({ solar: result.solar.score, wind: result.wind.score, hydro: result.hydro.score });
+      }
+      return data;
+    }
+
+    function generateLabels(range, step) {
+      var labels = [];
+      for (var val = range[0]; val <= range[1]; val += step) {
+        labels.push(val);
+      }
+      return labels;
+    }
+
+    function drawAllCharts() {
+      drawChart('chart-temp', function() {
+        return generateData('temp', [-10, 45], 5);
+      }, generateLabels([-10, 45], 5));
+
+      drawChart('chart-wind', function() {
+        return generateData('wind', [0, 20], 2);
+      }, generateLabels([0, 20], 2));
+
+      drawChart('chart-precip', function() {
+        return generateData('precip', [0, 200], 20);
+      }, generateLabels([0, 200], 20));
+
+      drawChart('chart-elev', function() {
+        return generateData('elev', [0, 3000], 300);
+      }, generateLabels([0, 3000], 300));
+    }
+
+    // Event listeners for inputs
+    var inputs = ['temp', 'wind', 'precip', 'elev', 'snow'];
+    for (var i = 0; i < inputs.length; i++) {
+      document.getElementById(inputs[i]).addEventListener('input', function() {
+        // Clear active preset
+        var btns = document.querySelectorAll('.preset-btn');
+        for (var j = 0; j < btns.length; j++) {
+          btns[j].classList.remove('active');
+        }
+        updateDisplay();
+      });
+    }
+
+    // Preset buttons
+    var presetBtns = document.querySelectorAll('.preset-btn');
+    for (var i = 0; i < presetBtns.length; i++) {
+      presetBtns[i].addEventListener('click', function() {
+        var preset = this.getAttribute('data-preset');
+        var config = presets[preset];
+        
+        document.getElementById('temp').value = config.temp;
+        document.getElementById('wind').value = config.wind;
+        document.getElementById('precip').value = config.precip;
+        document.getElementById('elev').value = config.elev;
+        document.getElementById('snow').value = config.snow;
+        
+        // Update active state
+        var btns = document.querySelectorAll('.preset-btn');
+        for (var j = 0; j < btns.length; j++) {
+          btns[j].classList.remove('active');
+        }
+        this.classList.add('active');
+        
+        updateDisplay();
+      });
+    }
+
+    // Handle resize
+    var resizeTimeout;
+    window.addEventListener('resize', function() {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(drawAllCharts, 100);
+    });
+
+    // Initial update
+    updateDisplay();
+  </script>
+</body>
+</html>
