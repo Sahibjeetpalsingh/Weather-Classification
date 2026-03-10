@@ -44,7 +44,7 @@ The interface has three distinct views, each serving a different part of the exp
 
 ### 01 &nbsp; Climate Controls
 
-> Set any climate profile using five sliders or jump straight in with one of eight built-in presets — Desert, Monsoon, Mountain, Coastal and more. No configuration, no install. Open the page and the tool is ready.
+> Set any climate profile using five sliders or jump straight in with one of eight built-in presets-- Desert, Monsoon, Mountain, Coastal and more. No configuration, no install. Open the page and the tool is ready.
 
 <p align="center">
   <a href="https://weather-energy.netlify.app/">
@@ -68,7 +68,7 @@ The interface has three distinct views, each serving a different part of the exp
 
 ### 03 &nbsp; R Analysis Dashboard
 
-> The R pipeline produces real statistical charts from NOAA station data. Boxplots, heatmaps, radar charts and correlation plots all live here — proving that the scoring rules hold up in practice, not just on paper.
+> The R pipeline produces real statistical charts from NOAA station data. Boxplots, heatmaps, radar charts and correlation plots all live here-- proving that the scoring rules hold up in practice, not just on paper.
 
 <p align="center">
   <img src="docs/images/3.png" width="92%" alt="R analysis charts and dashboards" />
@@ -126,17 +126,17 @@ These five presets show the range of what the engine produces. Notice that the M
 
 | Climate | Temp | Wind | Precip | Elev | Snow | Result |
 |:---|:---:|:---:|:---:|:---:|:---:|:---:|
-| 🏜️ Desert | 35°C | 4 m/s | 10 mm | 300 m | 0 cm | ☀️ Solar — High |
-| 🏔️ Mountain | 5°C | 7 m/s | 120 mm | 2000 m | 30 cm | 🌬️ Wind — Low |
-| 🌧️ Monsoon | 26°C | 5 m/s | 200 mm | 500 m | 0 cm | 💧 Hydro — High |
-| 🌊 Coastal | 18°C | 8 m/s | 70 mm | 50 m | 0 cm | 🌬️ Wind — High |
-| 🌿 Temperate | 12°C | 3 m/s | 90 mm | 400 m | 5 cm | 💧 Hydro — Mod |
+| 🏜️ Desert | 35°C | 4 m/s | 10 mm | 300 m | 0 cm | ☀️ Solar-- High |
+| 🏔️ Mountain | 5°C | 7 m/s | 120 mm | 2000 m | 30 cm | 🌬️ Wind-- Low |
+| 🌧️ Monsoon | 26°C | 5 m/s | 200 mm | 500 m | 0 cm | 💧 Hydro-- High |
+| 🌊 Coastal | 18°C | 8 m/s | 70 mm | 50 m | 0 cm | 🌬️ Wind-- High |
+| 🌿 Temperate | 12°C | 3 m/s | 90 mm | 400 m | 5 cm | 💧 Hydro-- Mod |
 
 <br>
 
 ## The Design Choice That Shaped Everything
 
-Early in the project, the obvious path was to train a classifier. Collect labelled climate energy data, pick a model, tune it, deploy it. That approach has real strengths — it can capture nonlinear patterns, handle edge cases gracefully and it looks impressive in a portfolio.
+Early in the project, the obvious path was to train a classifier. Collect labelled climate energy data, pick a model, tune it, deploy it. That approach has real strengths-- it can capture nonlinear patterns, handle edge cases gracefully and it looks impressive in a portfolio.
 
 But it also has a problem. When it tells a homeowner that Solar is their best option, they cannot see why. They cannot ask what would change the answer. They cannot point a domain expert at the reasoning and ask whether it is sound.
 
