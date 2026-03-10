@@ -40,10 +40,41 @@ Move a slider. The scores update instantly. The recommendation appears with its 
 
 The interface has three distinct views, each serving a different part of the experience.
 
-| 🎛️ Climate Controls | 📊 Score Breakdown | 📈 Analysis Dashboard |
-|:---:|:---:|:---:|
-| ![Sliders and presets](docs/images/1.png) | ![Score breakdown panel](docs/images/2.png) | ![R analysis charts](docs/images/3.png) |
-| **Eight built-in presets** let you jump straight into a Desert, Monsoon, Mountain or Coastal climate profile. Five sliders give you full manual control over every input. | **Every score is shown**, not just the winner. You can see exactly why Solar lost to Hydro or why Wind barely edged out the competition. The margin is always visible. | **The R pipeline outputs** real statistical charts built from NOAA station data. Boxplots, heatmaps, radar charts and correlation plots all live here, validating that the scoring rules hold up in practice. |
+---
+
+### 01 &nbsp; Climate Controls
+
+> Set any climate profile using five sliders or jump straight in with one of eight built-in presets — Desert, Monsoon, Mountain, Coastal and more. No configuration, no install. Open the page and the tool is ready.
+
+<p align="center">
+  <a href="https://weather-energy.netlify.app/">
+    <img src="docs/images/1.png" width="92%" alt="Climate sliders and preset controls" />
+  </a>
+</p>
+
+---
+
+### 02 &nbsp; Score Breakdown
+
+> Every score is shown, not just the winner. You can see exactly why Solar lost to Hydro or why Wind barely edged out the competition. The margin between first and second is always visible, so you always know how much to trust the recommendation.
+
+<p align="center">
+  <a href="https://weather-energy.netlify.app/">
+    <img src="docs/images/2.png" width="92%" alt="Full score breakdown panel" />
+  </a>
+</p>
+
+---
+
+### 03 &nbsp; R Analysis Dashboard
+
+> The R pipeline produces real statistical charts from NOAA station data. Boxplots, heatmaps, radar charts and correlation plots all live here — proving that the scoring rules hold up in practice, not just on paper.
+
+<p align="center">
+  <img src="docs/images/3.png" width="92%" alt="R analysis charts and dashboards" />
+</p>
+
+---
 
 <br>
 
