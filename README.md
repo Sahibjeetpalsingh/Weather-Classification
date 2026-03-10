@@ -16,7 +16,6 @@
 <br>
 
 ## See It in Action
-
 <p align="center">
   <a href="https://weather-energy.netlify.app/">
     <img src="docs/images/Recording+2026-03-09+170553.gif" width="760" alt="App demo — move a slider, scores update instantly" />
