@@ -14,7 +14,7 @@
 
 <p align="center">
   <a href="https://weather-energy.netlify.app/">
-    <img src="docs/images/app-hero.svg" alt="Renewable Energy Classifier hero preview" width="100%" />
+    <img src="docs/images/Gemini_Generated_Image_nytdnznytdnznytd.png" alt="Renewable Energy Classifier hero preview" width="100%" />
   </a>
 </p>
 
