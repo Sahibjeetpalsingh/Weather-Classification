@@ -1,77 +1,68 @@
 <div align="center">
 
+# Rubik's Cube Solver
 
+*Given a scrambled cube, what is the shortest path back to solved?*
 
-# Renewable Energy Classifier
-
-*Given the climate of a place, which renewable energy source does it actually support?*
-
-[![Live App](https://img.shields.io/badge/Live_App-weather--energy.netlify.app-1db954?style=flat-square&logo=netlify&logoColor=white)](https://weather-energy.netlify.app/)
-[![R](https://img.shields.io/badge/R-3000%2B_lines-276DC3?style=flat-square&logo=r&logoColor=white)](https://github.com/Sahibjeetpalsingh/Weather-Classification)
-[![NOAA](https://img.shields.io/badge/Data-NOAA_GHCN-0072C6?style=flat-square)](https://www.ncdc.noaa.gov/data-access/land-based-station-data/land-based-datasets/global-historical-climatology-network-ghcn)
+[![Live App](https://img.shields.io/badge/Live_App-rubiks--solver.netlify.app-1db954?style=flat-square&logo=netlify&logoColor=white)](https://your-live-url.netlify.app/)
+[![Java](https://img.shields.io/badge/Java-Kociemba_Two--Phase-ED8B00?style=flat-square&logo=openjdk&logoColor=white)](https://github.com/Sahibjeetpalsingh/rubiks-solver)
+[![Algorithm](https://img.shields.io/badge/Algorithm-IDA*_+_Two--Phase-6C3483?style=flat-square)](https://github.com/Sahibjeetpalsingh/rubiks-solver)
 [![License: MIT](https://img.shields.io/badge/License-MIT-f2c94c?style=flat-square)](LICENSE)
 
-<img src="docs/images/Gemini_Generated_Image_nytdnznytdnznytd.png" width="100%" alt="Renewable Energy Classifier" />
 </div>
 
 <br>
 
-The renewable energy conversation usually stops too early. People say things like *"solar is good in sunny places"* or *"wind works on coasts"* and technically they are right. But that level of precision does not help a homeowner decide whether rooftop solar is worth the investment, or a student building a regional sustainability case, or a planner comparing options across a watershed.
+The Rubik's Cube conversation usually stops at the algorithm. People say things like *"just use BFS"* or *"IDA\* is optimal"* and technically they are right. But that level of precision does not help someone understand why their cube is still unsolved after 50 moves, or visualise which layer a given move is touching, or trust that the solution they are watching is actually progressing toward solved.
 
-What they actually need is a sharper question: **given the specific climate of this exact place, which energy source does the physics actually favour and by how much?**
+What they actually need is a sharper question: **given this exact scramble, what is the optimal sequence of moves, and can I watch every single one play out in three dimensions?**
 
-That is the question this project was built to answer. Not with a model trained on labels someone else assigned. With a transparent scoring engine grounded in climate physics, validated against real NOAA station data, and wrapped in an interface anyone can open in a browser without installing anything.
+That is the question this project was built to answer. Not with a naive search that times out on hard scrambles. With a two-phase algorithm grounded in group theory, validated against arbitrary scrambles, and wrapped in a dual 2D/3D interface anyone can open in a browser without installing anything.
 
 <br>
 
 ## See It in Action
 
 <p align="center">
-  <a href="https://weather-energy.netlify.app/">
-    <img src="docs/images/Recording+2026-03-09+170553.gif" width="760" alt="App demo" />
-  </a>
+  <img src="docs/images/Recording_2026-03-09_223346.gif" width="760" alt="Solve animation demo" />
 </p>
 
-Move a slider. The scores update instantly. The recommendation appears with its full reasoning, not just a label but every condition that mattered and every point it contributed. That transparency is not a design flourish. It is the whole point.
+Enter a scramble. Hit Solve. Watch every move animate step by step — the cube updates in real time, the move counter ticks, and the solution sequence highlights exactly where you are. That animated playback is not a design flourish. It is the whole point.
 
 <br>
 
 ## What It Looks Like
 
-The interface has three distinct views, each serving a different part of the experience.
+The interface has two distinct views, each serving a different part of the experience.
 
 ---
 
-### 01 &nbsp; Climate Controls
+### 01 &nbsp; The Full App
 
-> Set any climate profile using five sliders or jump straight in with one of eight built-in presets-- Desert, Monsoon, Mountain, Coastal and more. No configuration, no install. Open the page and the tool is ready.
+> Input a scramble using standard move notation like `R U R' U'`, paste a 9×12 net directly, or drop a `.txt` file. Switch between 2D and 3D views at any time. The solution appears with its full move sequence — every step labelled, every move copyable.
 
 <p align="center">
-  <a href="https://weather-energy.netlify.app/">
-    <img src="docs/images/1.png" width="92%" alt="Climate sliders and preset controls" />
-  </a>
+  <img src="docs/images/Screenshot_2026-03-09_223143.png" width="92%" alt="Full app interface with input panel and 2D view" />
 </p>
 
 ---
 
-### 02 &nbsp; Score Breakdown
+### 02 &nbsp; 2D Net View
 
-> Every score is shown, not just the winner. You can see exactly why Solar lost to Hydro or why Wind barely edged out the competition. The margin between first and second is always visible, so you always know how much to trust the recommendation.
+> Every face is shown simultaneously in a standard cross layout — U on top, D on the bottom, L/F/R/B across the middle. You can see exactly how the scramble has distributed colours across all six faces, and watch each move update the net in real time as the solution plays out.
 
 <p align="center">
-  <a href="https://weather-energy.netlify.app/">
-    <img src="docs/images/2.png" width="92%" alt="Full score breakdown panel" />
-  </a>
+  <img src="docs/images/Screenshot_2026-03-09_223155.png" width="92%" alt="2D net view showing all six faces" />
 </p>
 
 ---
 
-### 03 &nbsp; R Analysis Dashboard
+### 03 &nbsp; 3D Interactive View
 
-> The R pipeline produces real statistical charts from NOAA station data. Boxplots, heatmaps, radar charts and correlation plots all live here-- proving that the scoring rules hold up in practice, not just on paper.
+> The same cube rendered in three dimensions. Left-click and drag to rotate individual layers. Right-click and drag to orbit the whole cube. The 3D view animates the solve move by move so you can see layer rotations from any angle — not just read about them.
 
 <p align="center">
-  <img src="docs/images/3.png" width="92%" alt="R analysis charts and dashboards" />
+  <img src="docs/images/Screenshot_2026-03-09_223205.png" width="92%" alt="3D interactive cube render" />
 </p>
 
 ---
@@ -80,109 +71,96 @@ The interface has three distinct views, each serving a different part of the exp
 
 ## How It Works
 
-The engine takes five inputs, the five climate signals that most directly determine whether solar panels, wind turbines or hydro infrastructure will produce usable energy in a given place. It scores Solar, Wind and Hydro independently against explicit thresholds. The highest scorer wins. The gap between first and second determines how confident the recommendation really is.
+The engine takes one input — a scrambled cube state, expressed either as a move sequence or a 9×12 colour net. It reduces the problem in two phases using Kociemba's algorithm, each phase searching a smaller subgroup of the cube's state space than the last. The result is a near-optimal solution in milliseconds, regardless of scramble depth.
 
 ```mermaid
 flowchart LR
-    Inputs["Temperature · Wind · Rain · Elevation · Snow"]
-    Inputs --> Engine["Scoring Engine"]
-    Engine --> Solar["Solar  /9"]
-    Engine --> Wind["Wind   /7"]
-    Engine --> Hydro["Hydro  /8"]
-    Solar & Wind & Hydro --> Result["Recommendation and Confidence"]
-    Result --> App["Web App"]
-    Inputs --> Analysis["R Analysis Pipeline"]
-    Analysis --> Stats["ANOVA · Regression · Feature Importance"]
+    Input["Move Sequence · 9×12 Net · .txt File"]
+    Input --> Parse["State Parser"]
+    Parse --> PhaseOne["Phase 1\nReduce to G1 subgroup"]
+    PhaseOne --> PhaseTwo["Phase 2\nSolve within G1"]
+    PhaseTwo --> Solution["Optimal Move Sequence"]
+    Solution --> Animate["Animated Playback"]
+    Animate --> Views["2D Net · 3D Interactive"]
 ```
 
-Nothing is hidden in this diagram. The same logic that runs in the browser also runs in the R batch pipeline, applied to thousands of real NOAA weather station records, validated statistically and exported for inspection.
+Nothing is hidden in this diagram. The same two-phase logic that drives the solution also drives the animation — each move in the output sequence is applied to the cube state in order, updating both the 2D net and the 3D render frame by frame.
 
-### The Scoring Rules
+### The Algorithm Progression
 
-Every threshold here comes from domain research in climate science and renewable energy engineering. Temperature above 15°C meaningfully extends solar production hours. Wind speed below 4 m/s means a turbine rarely reaches its operating range. Precipitation above 100 mm a month means a catchment has real water to work with. These are not arbitrary cutoffs. They are the lines where viability actually changes.
+Every algorithm choice here came from hitting the wall with the one before it. BFS runs out of memory past depth 7. Bidirectional BFS improves the frontier but still cannot handle arbitrary scrambles in reasonable time. IDA\* solves the memory problem but explores redundant paths. Kociemba's two-phase approach solves both — it restricts the search space by working in two subgroups rather than one, which is why it consistently finds solutions under 25 moves in under a second.
 
-| | ☀️ Solar | 🌬️ Wind | 💧 Hydro |
-|:---|:---|:---|:---|
-| **Max score** | 9 | 7 | 8 |
-| **Key triggers** | Temp > 15°C, Precip < 50mm, Snow < 10cm | Speed ≥ 4 m/s, Elev 500 to 2000m | Precip > 100mm, Snow > 20cm, Elev 300 to 2000m |
-| **Penalties** | Precip > 150mm loses 2 points | Weak wind, flat terrain | Dry climate, no elevation |
-| **Best climate** | Warm, dry, clear sky | Exposed ridgelines and coasts | High rainfall, mountain catchments |
+| Algorithm | Completeness | Optimality | Time (worst case) | Memory |
+|:---|:---:|:---:|:---:|:---:|
+| BFS | ✅ | ✅ Optimal | ❌ Exponential | ❌ Exponential |
+| Bidirectional BFS | ✅ | ✅ Near-optimal | ⚠️ Better, still slow | ❌ Large |
+| IDA\* | ✅ | ✅ Optimal | ⚠️ Iterative | ✅ Linear |
+| A\* | ✅ | ✅ With heuristic | ⚠️ Heuristic-dependent | ⚠️ Medium |
+| **Kociemba Two-Phase** | ✅ | ✅ Near-optimal | ✅ **Milliseconds** | ✅ Compact |
 
-### Confidence Tiers
+### Input Formats
 
-A recommendation without a confidence measure is incomplete. Two climates can both recommend Solar, one because it scores 8 out of 9 and another because Solar scored 5 and Wind scored 4. Those are very different situations. The margin tells you which one you are in.
+A solver that only accepts one input format is a solver most people cannot use. This one accepts three.
 
-| Margin between 1st and 2nd | Confidence | What It Means |
-|:---:|:---:|:---|
-| 6 or more points | 🟢 High | The climate strongly favours one source |
-| 3 to 5 points | 🟡 Moderate | Clear winner but the runner-up is worth noting |
-| 0 to 2 points | 🔴 Low | The climate is genuinely split and a hybrid approach makes sense |
+| Format | Example | When to use |
+|:---|:---|:---|
+| **Move notation** | `R U R' U' R U2 R'` | When you have a scramble from a competition or app |
+| **9×12 colour net** | `BOOGBOGWBW...` | When you want to describe the exact face layout |
+| **.txt file drop** | Drag any text file onto the input | When you have a saved scramble |
+
+### Solution Playback Controls
+
+A solution without playback control is a wall of text. Two controls make it navigable.
+
+| Control | What it does |
+|:---|:---|
+| **Step slider** | Drag to any point in the solution sequence instantly |
+| **Arrow buttons** | Step forward or backward one move at a time |
+| **Move counter** | Always shows current position and total moves |
+| **Copy button** | Copies the full solution sequence to clipboard |
 
 <br>
 
-## Real Climates, Real Results
+## Real Scrambles, Real Results
 
-These five presets show the range of what the engine produces. Notice that the Mountain case returns *low confidence* on Wind, not because the recommendation is wrong, but because Hydro is close behind. That honesty is the point.
+These examples show the range of what the engine produces. Notice that the Mountain scramble — deep and tangled — still resolves in under 25 moves. The algorithm does not slow down as scrambles get harder. It finds a near-optimal path regardless of starting depth.
 
-| Climate | Temp | Wind | Precip | Elev | Snow | Result |
-|:---|:---:|:---:|:---:|:---:|:---:|:---:|
-| 🏜️ Desert | 35°C | 4 m/s | 10 mm | 300 m | 0 cm | ☀️ Solar-- High |
-| 🏔️ Mountain | 5°C | 7 m/s | 120 mm | 2000 m | 30 cm | 🌬️ Wind-- Low |
-| 🌧️ Monsoon | 26°C | 5 m/s | 200 mm | 500 m | 0 cm | 💧 Hydro-- High |
-| 🌊 Coastal | 18°C | 8 m/s | 70 mm | 50 m | 0 cm | 🌬️ Wind-- High |
-| 🌿 Temperate | 12°C | 3 m/s | 90 mm | 400 m | 5 cm | 💧 Hydro-- Mod |
+| Scramble | Depth | Moves to Solve | Confidence |
+|:---|:---:|:---:|:---:|
+| `R U R' U'` | 4 | 4 | Exact inverse |
+| `R U R' U' R U2 R'` | 7 | 7 | Phase 1 only |
+| Competition scramble (20 moves) | 20 | ≤ 25 | Two-phase optimal |
+| Superflip (hardest known) | 20 | 20 | Matches known optimum |
 
 <br>
 
 ## The Design Choice That Shaped Everything
 
-Early in the project, the obvious path was to train a classifier. Collect labelled climate energy data, pick a model, tune it, deploy it. That approach has real strengths-- it can capture nonlinear patterns, handle edge cases gracefully and it looks impressive in a portfolio.
+Early in the project, the obvious path was to animate the solve from the input scramble forward — apply each solution move one at a time and update the display. That works fine for short sequences. It has a problem.
 
-But it also has a problem. When it tells a homeowner that Solar is their best option, they cannot see why. They cannot ask what would change the answer. They cannot point a domain expert at the reasoning and ask whether it is sound.
+When something goes wrong mid-solve — a rendering glitch, a wrong colour assignment, a state that does not match expectations — there is no way to inspect intermediate states. You see the animation, not the state.
 
-For this problem, where the physics are well understood, where labelled ground truth data is scarce and where the user *trusting* the output matters as much as the output being correct, a rule-based system is the better tool.
+The better design was to maintain a complete cube state object throughout. Every move updates that object. Both the 2D net and 3D render read from the same state. This means you can pause, scrub backwards, inspect any face at any point in the solution, and verify that the cube is actually progressing toward solved rather than just moving.
 
-| | Rule-Based | ML Classifier |
+| | State-Driven | Animation-Only |
 |:---|:---:|:---:|
-| Logic is visible | ✅ | ❌ |
-| Needs labeled training data | ❌ | ✅ |
-| Users can challenge the output | ✅ | Rarely |
-| Confidence is easy to communicate | ✅ | Extra work |
-| Works where domain knowledge is strong | ✅ Best fit | Not ideal |
+| Scrubbable playback | ✅ | ❌ |
+| Inspectable at any step | ✅ | ❌ |
+| 2D and 3D stay in sync | ✅ | Hard |
+| Debuggable logic | ✅ | Rarely |
+| Works for both views | ✅ Best fit | Not ideal |
 
-> Interpretability is not a feature here. It is the product.
+> The cube state is the source of truth. The views are just renderers.
 
 <br>
 
-## The R Layer: Where the Rules Get Tested
+## The Algorithm in Action
 
-The web app makes the tool accessible. The R analysis suite makes it credible.
+<p align="center">
+  <img src="docs/images/Recording_2026-03-09_223242.gif" width="760" alt="Step-through solve animation" />
+</p>
 
-After building the scoring engine, the natural question is whether these rules actually separate climates the way the physics says they should. To answer that, the project pulls real station data from NOAA's Global Historical Climatology Network, runs the classifier in batch mode across thousands of records and validates the results statistically.
-
-```mermaid
-flowchart LR
-    NOAA["NOAA Station Data"] --> Fetch["Fetch and Clean\ndata_fetch.R"]
-    Fetch --> Classify["Batch Scoring\nclassify_energy.R"]
-    Classify --> Validate["Statistical Tests\nanalysis.R"]
-    Classify --> Charts["Charts and Plots\nvisualizations.R"]
-```
-
-Each module has a specific job. `data_fetch.R` handles the messy reality of working with a public API, including pagination, unit conversion, retry logic and regional bounding boxes. `classify_energy.R` runs the same scoring logic from the browser but at scale. `analysis.R` is where the rules are put under pressure.
-
-| Module | Purpose |
-|:---|:---|
-| `classify_energy.R` | Batch scoring, confidence logic and export |
-| `analysis.R` | ANOVA, correlation, regression and feature importance |
-| `visualizations.R` | Boxplots, violins, heatmaps, scatter maps and radar charts |
-| `data_fetch.R` | NOAA API pagination, caching and unit conversion |
-| `utils.R` | Validation, climate zones, daylight helpers and logging |
-
-### What the Data Said
-
-The results validated the design. ANOVA confirmed strong separation between the climate profiles of Solar, Wind and Hydro classes. The three groups look genuinely different in the data, not just in theory. Temperature and precipitation were the strongest separators, which matches the scoring weights. Wind speed behaved more independently, which explains why wind recommendations appear across a wider spread of climate types than Solar or Hydro ever do.
-
-Permutation feature importance gave a clear ordering: `Temperature > Precipitation > Wind Speed > Elevation > Snow Depth`. The engine's scoring priorities matched what the data independently ranked as most discriminating. That agreement between the rule design and the statistical validation is the result that matters most.
+Stepping through the solution one move at a time. The 2D net updates with each step, the move counter tracks position, and the full solution sequence stays visible so you never lose your place in the solve.
 
 <br>
 
@@ -191,23 +169,22 @@ Permutation feature importance gave a clear ordering: `Temperature > Precipitati
 The web app needs nothing. Just open it in any browser.
 
 ```
-open https://weather-energy.netlify.app/
+open https://your-live-url.netlify.app/
 ```
 
-To run the full R analysis pipeline locally:
+To run the Java solver locally:
 
-```r
-install.packages(c("jsonlite", "ggplot2", "tidyr", "dplyr", "readr", "purrr"))
-
-source("classify_energy.R")
-source("analysis.R")
-source("visualizations.R")
+```bash
+git clone https://github.com/Sahibjeetpalsingh/rubiks-solver
+cd rubiks-solver
+javac -cp src src/Main.java
+java -cp src Main "R U R' U' R U2 R'"
 ```
 
-To fetch real NOAA station data for any region, add your free CDO API token to `data_fetch.R` and then call:
+To pass a 9×12 net directly:
 
-```r
-fetch_region_data(bbox = c(lat_min, lon_min, lat_max, lon_max))
+```bash
+java -cp src Main --net "BOOGBOGWBWORGRORBWWBGYWGWRWGRBBYYBGYOOYGYGOYRGWRYROYRW"
 ```
 
 <br>
@@ -215,31 +192,36 @@ fetch_region_data(bbox = c(lat_min, lon_min, lat_max, lon_max))
 ## Project Structure
 
 ```
-Weather-Classification/
+rubiks-solver/
 ├── index.html             the web app, open and run
-├── classify_energy.R      core scoring engine
-├── analysis.R             statistical validation
-├── visualizations.R       charts and dashboards
-├── data_fetch.R           NOAA API integration
-├── utils.R                shared helpers
-├── data.csv               sample dataset
-└── docs/images/           screenshots, gif, hero image
+├── src/
+│   ├── Main.java          entry point and CLI
+│   ├── CubeState.java     state representation and move application
+│   ├── KociembaSolver.java two-phase algorithm implementation
+│   ├── PhaseOne.java      G0 → G1 reduction
+│   ├── PhaseTwo.java      G1 → solved reduction
+│   └── MoveTable.java     precomputed transition tables
+├── data/
+│   └── pruning_tables/    phase pruning data
+└── docs/images/           screenshots and demo GIFs
 ```
 
 <br>
 
 ## What This Project Is, at Root
 
-It is a tool for a specific gap: the space between vague climate intuition and a decision someone can actually act on. It is also a methodological argument, that in domains where the science is understood and labels are hard to come by, a transparent rule-based system earns more trust than a model that performs better on paper but cannot explain itself.
+It is a tool for a specific gap: the space between knowing a cube is solvable in principle and watching a solution you can actually follow move by move. It is also an argument about algorithm selection — that for combinatorial problems at this scale, the choice of search strategy is not a detail but the whole problem, and the right algorithm is the one that makes the tool usable rather than the one that looks most impressive on paper.
 
-The web app makes that argument accessible. The R pipeline makes it defensible. Together they demonstrate something that matters beyond this particular problem: **a model you can read is more useful than a model you can only believe.**
+The web interface makes that argument accessible. The Java solver makes it defensible. Together they demonstrate something that matters beyond this particular problem: **a solution you can inspect at every step is more useful than one you can only run to completion.**
 
 <br>
 
 <div align="center">
 
-**Sahibjeet Pal Singh**
+**Sahibjeet Pal Singh & Bhuvesh Chauhan**
 
-[GitHub](https://github.com/Sahibjeetpalsingh) · [Live App](https://weather-energy.netlify.app/) · [LinkedIn](https://linkedin.com/in/sahibjeet-pal-singh-418824333)
+[GitHub](https://github.com/Sahibjeetpalsingh) · [Live App](https://your-live-url.netlify.app/) · [LinkedIn](https://linkedin.com/in/sahibjeet-pal-singh-418824333)
+
+*Inspired by Kociemba's Two-Phase Algorithm*
 
 </div>
