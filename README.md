@@ -64,9 +64,9 @@ The README is already wired for media. Replace the placeholder SVGs in `docs/ima
 
 | Interface | Preview |
 | --- | --- |
-| Climate presets and slider controls | ![Preset gallery](docs/images/preset-gallery.svg) |
-| Transparent score breakdown | ![Score breakdown](docs/images/score-breakdown.svg) |
-| Analysis dashboard and charts | ![Analysis dashboard](docs/images/analysis-dashboard.svg) |
+| Climate presets and slider controls | ![Preset gallery](docs/images/Screenshot 2026-03-09 170054.png) |
+| Transparent score breakdown | ![Score breakdown](docs/images/Screenshot 2026-03-09 170123.png) |
+| Analysis dashboard and charts | ![Analysis dashboard](docs/images/Screenshot 2026-03-09 170130.png) |
 
 ## What The Tool Actually Does
 
