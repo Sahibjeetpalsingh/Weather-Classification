@@ -1,0 +1,18 @@
+<svg width="1200" height="700" viewBox="0 0 1200 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="700" rx="28" fill="#F8FAFC"/>
+  <text x="60" y="92" fill="#0D223C" font-family="Arial, sans-serif" font-size="42" font-weight="700">Analysis Dashboard Placeholder</text>
+  <text x="60" y="138" fill="#567089" font-family="Arial, sans-serif" font-size="24">Replace this with a collage of your charts, tables, or exported dashboard figures.</text>
+  <rect x="60" y="190" width="510" height="210" rx="22" fill="#FFFFFF"/>
+  <rect x="630" y="190" width="510" height="210" rx="22" fill="#FFFFFF"/>
+  <rect x="60" y="444" width="510" height="196" rx="22" fill="#FFFFFF"/>
+  <rect x="630" y="444" width="510" height="196" rx="22" fill="#FFFFFF"/>
+  <g stroke-width="8" stroke-linecap="round">
+    <path d="M106 350C186 310 248 230 356 242C430 250 470 292 522 232" stroke="#F2994A"/>
+    <path d="M674 342L730 286L782 306L834 246L892 272L946 226L1032 260" stroke="#2D9CDB"/>
+    <path d="M116 610C166 520 282 496 354 548C414 592 482 596 522 518" stroke="#27AE60"/>
+  </g>
+  <circle cx="834" cy="544" r="78" fill="#EAF5FD"/>
+  <path d="M834 466A78 78 0 0 1 905.4 579L834 544V466Z" fill="#2D9CDB"/>
+  <path d="M905.4 579A78 78 0 0 1 773.8 599L834 544L905.4 579Z" fill="#27AE60"/>
+  <path d="M773.8 599A78 78 0 0 1 834 466V544L773.8 599Z" fill="#F2994A"/>
+</svg>

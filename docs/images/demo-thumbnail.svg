@@ -1,0 +1,16 @@
+<svg width="1280" height="720" viewBox="0 0 1280 720" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1280" height="720" rx="32" fill="#091A2D"/>
+  <rect x="40" y="40" width="1200" height="640" rx="24" fill="url(#paint0_linear)"/>
+  <circle cx="640" cy="360" r="92" fill="#F7F4ED" fill-opacity="0.92"/>
+  <path d="M607 304L714 360L607 416V304Z" fill="#0D223C"/>
+  <text x="100" y="152" fill="#F7F4ED" font-family="Arial, sans-serif" font-size="54" font-weight="700">Project Walkthrough</text>
+  <text x="100" y="214" fill="#D4E1EC" font-family="Arial, sans-serif" font-size="28">Replace this thumbnail with a real UI capture and point the link to your demo video.</text>
+  <rect x="100" y="470" width="298" height="88" rx="18" fill="#F2C94C"/>
+  <text x="140" y="525" fill="#0D223C" font-family="Arial, sans-serif" font-size="30" font-weight="700">Watch the app flow</text>
+  <defs>
+    <linearGradient id="paint0_linear" x1="72" y1="80" x2="1190" y2="654" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1F5F9A"/>
+      <stop offset="1" stop-color="#27AE60"/>
+    </linearGradient>
+  </defs>
+</svg>

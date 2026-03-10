@@ -1,0 +1,23 @@
+<svg width="1200" height="700" viewBox="0 0 1200 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="700" rx="28" fill="#F7F4ED"/>
+  <text x="60" y="92" fill="#0D223C" font-family="Arial, sans-serif" font-size="42" font-weight="700">Preset Gallery Placeholder</text>
+  <text x="60" y="138" fill="#567089" font-family="Arial, sans-serif" font-size="24">Swap this file with a screenshot showing the climate preset buttons and sliders.</text>
+  <g>
+    <rect x="60" y="196" width="240" height="112" rx="20" fill="#FFF2E7"/>
+    <rect x="324" y="196" width="240" height="112" rx="20" fill="#ECF3FA"/>
+    <rect x="588" y="196" width="240" height="112" rx="20" fill="#E9F7EF"/>
+    <rect x="852" y="196" width="240" height="112" rx="20" fill="#E8F0F8"/>
+  </g>
+  <text x="118" y="262" fill="#B85D0B" font-family="Arial, sans-serif" font-size="30" font-weight="700">Desert</text>
+  <text x="388" y="262" fill="#1F5F9A" font-family="Arial, sans-serif" font-size="30" font-weight="700">Coastal</text>
+  <text x="650" y="262" fill="#12733A" font-family="Arial, sans-serif" font-size="30" font-weight="700">Mountain</text>
+  <text x="926" y="262" fill="#0D223C" font-family="Arial, sans-serif" font-size="30" font-weight="700">Monsoon</text>
+  <g fill="#D9E7F2">
+    <rect x="60" y="394" width="1080" height="18" rx="9"/>
+    <rect x="60" y="486" width="1080" height="18" rx="9"/>
+    <rect x="60" y="578" width="1080" height="18" rx="9"/>
+  </g>
+  <text x="60" y="374" fill="#567089" font-family="Arial, sans-serif" font-size="24">Temperature</text>
+  <text x="60" y="466" fill="#567089" font-family="Arial, sans-serif" font-size="24">Wind Speed</text>
+  <text x="60" y="558" fill="#567089" font-family="Arial, sans-serif" font-size="24">Precipitation</text>
+</svg>
